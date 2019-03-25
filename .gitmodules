@@ -4,3 +4,6 @@
 [submodule "StaticScan"]
 	path = StaticScan
 	url = https://github.com/horsicq/StaticScan.git
+[submodule "xvdg_plugins"]
+	path = xvdg_plugins
+	url = https://github.com/horsicq/xvdg_plugins.git
