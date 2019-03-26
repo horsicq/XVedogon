@@ -34,7 +34,6 @@ GuiMainWindow::GuiMainWindow(QWidget *parent) :
     DialogOptions::loadOptions(&xvdgOptions);
     adjust();
 
-
     if(QCoreApplication::arguments().count()>1)
     {
         QString sFileName=QCoreApplication::arguments().at(1);
@@ -45,6 +44,8 @@ GuiMainWindow::GuiMainWindow(QWidget *parent) :
 
 GuiMainWindow::~GuiMainWindow()
 {
+    DialogOptions::saveOptions(&xvdgOptions);
+
     delete ui;
 }
 
@@ -157,7 +158,6 @@ void GuiMainWindow::dropEvent(QDropEvent *event)
         }
     }
 }
-
 
 void GuiMainWindow::on_pushButtonOptions_clicked()
 {

@@ -7,3 +7,6 @@
 [submodule "xvdg_plugins"]
 	path = xvdg_plugins
 	url = https://github.com/horsicq/xvdg_plugins.git
+[submodule "XArchive"]
+	path = XArchive
+	url = https://github.com/horsicq/XArchive.git

@@ -26,3 +26,10 @@ include(../../_mylibs/StaticScan/formresult.pri)
 
 include(../xvdg_plugins/interface.pri)
 include(../xvdg_plugins/upx.pri)
+
+win32 {
+    RC_ICONS = ../icons/main.ico
+}
+macx {
+    ICON = ../icons/main.icns
+}
