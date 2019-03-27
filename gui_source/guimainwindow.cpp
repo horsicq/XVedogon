@@ -34,6 +34,8 @@ GuiMainWindow::GuiMainWindow(QWidget *parent) :
     DialogOptions::loadOptions(&xvdgOptions);
     adjust();
 
+    loadPlugins();
+
     if(QCoreApplication::arguments().count()>1)
     {
         QString sFileName=QCoreApplication::arguments().at(1);
@@ -165,4 +167,56 @@ void GuiMainWindow::on_pushButtonOptions_clicked()
     dialogOptions.exec();
 
     adjust();
+}
+
+void GuiMainWindow::loadPlugins()
+{
+#ifdef STATIC_PLUGINS
+    Plugin_Zip *pPluginZip=new Plugin_Zip(this);
+
+    listPlugins.append(pPluginZip);
+#else
+
+    QString sPluginPath=QCoreApplication::applicationDirPath()+QDir::separator()+"modules";
+
+    QDirIterator it(sPluginPath,QStringList() << "*.*",QDir::Files,QDirIterator::NoIteratorFlags);
+    while(it.hasNext())
+    {
+        QPluginLoader *pPluginLoader=new QPluginLoader(this);
+        pPluginLoader->setFileName(it.next());
+        bool bLoaded=false;
+        if(pPluginLoader->load())
+        {
+            QObject *pPlugin=pPluginLoader->instance();
+            if(pPlugin)
+            {
+                listPlugins.append(pPlugin);
+                bLoaded=true;
+            }
+        }
+        if(!bLoaded)
+        {
+            delete pPluginLoader;
+        }
+    }
+#endif
+    ui->labelModules->setText(tr("%1: %2").arg(tr("Modules")).arg(listPlugins.count()));
+}
+
+void GuiMainWindow::on_pushButtonAdvanced_toggled(bool checked)
+{
+    if(checked)
+    {
+        ui->stackedWidgetMain->setCurrentIndex(1);
+    }
+    else
+    {
+        ui->stackedWidgetMain->setCurrentIndex(0);
+    }
+}
+
+void GuiMainWindow::on_pushButtonAbout_clicked()
+{
+    DialogAbout dialogAbout(this);
+    dialogAbout.exec();
 }

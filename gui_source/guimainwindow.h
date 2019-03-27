@@ -28,6 +28,13 @@
 #include <QMimeData>
 #include "dialogstaticscan.h"
 #include "dialogoptions.h"
+#include "dialogabout.h"
+#ifdef STATIC_PLUGINS
+#include "plugin_zip.h"
+#else
+#include <QPluginLoader>
+#include <QDirIterator>
+#endif
 
 namespace Ui {
 class GuiMainWindow;
@@ -49,6 +56,11 @@ private slots:
     void adjust();
 
     void on_pushButtonOptions_clicked();
+    void loadPlugins();
+
+    void on_pushButtonAdvanced_toggled(bool checked);
+
+    void on_pushButtonAbout_clicked();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -58,6 +70,7 @@ protected:
 private:
     Ui::GuiMainWindow *ui;
     XVDG::OPTIONS xvdgOptions;
+    QList<QObject *> listPlugins;
 };
 
 #endif // GUIMAINWINDOW_H
