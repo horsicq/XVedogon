@@ -1,6 +1,6 @@
-QT       += core gui
+QT       += core gui widgets
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+CONFIG += static_plugins
 
 TARGET = gui_source
 TEMPLATE = app
@@ -10,22 +10,44 @@ CONFIG += c++11
 SOURCES += \
         guimainwindow.cpp \
         main_gui.cpp \
-        dialogoptions.cpp
+        dialogoptions.cpp \
+    dialogabout.cpp
 
 HEADERS += \
         guimainwindow.h \
-        dialogoptions.h
+        dialogoptions.h \
+    dialogabout.h
 
 FORMS += \
         guimainwindow.ui \
-        dialogoptions.ui
+        dialogoptions.ui \
+    dialogabout.ui
 
 include(../build.pri)
 
-include(../../_mylibs/StaticScan/formresult.pri)
+!contains(XCONFIG, formresult) {
+    XCONFIG += formresult
+    include(../../_mylibs/StaticScan/formresult.pri)
+}
+!contains(XCONFIG, plugin_interface) {
+    XCONFIG += plugin_interface
+    include(../xvdg_plugins/plugin_interface.pri)
+}
 
-include(../xvdg_plugins/interface.pri)
-include(../xvdg_plugins/upx.pri)
+
+static_plugins {
+
+    DEFINES += "STATIC_PLUGINS=1"
+
+    !contains(XCONFIG, plugin_zip) {
+        XCONFIG += plugin_zip
+        include(../xvdg_plugins/plugin_zip/plugin_zip.pri)
+    }
+    !contains(XCONFIG, plugin_upx) {
+        XCONFIG += plugin_upx
+        include(../xvdg_plugins/plugin_upx/plugin_upx.pri)
+    }
+}
 
 win32 {
     RC_ICONS = ../icons/main.ico
@@ -33,3 +55,6 @@ win32 {
 macx {
     ICON = ../icons/main.icns
 }
+
+RESOURCES += \
+    rsrc.qrc
