@@ -58,8 +58,6 @@ private slots:
     void on_pushButtonOptions_clicked();
     void loadPlugins();
 
-    void on_pushButtonAdvanced_toggled(bool checked);
-
     void on_pushButtonAbout_clicked();
 
 protected:

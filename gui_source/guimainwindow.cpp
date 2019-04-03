@@ -42,6 +42,10 @@ GuiMainWindow::GuiMainWindow(QWidget *parent) :
 
         _scan(sFileName);
     }
+
+//    ui->treeViewResult->setColumnWidth(1,40);
+//    ui->treeViewResult->header()->setSectionResizeMode(0,QHeaderView::Stretch);  // TODO Check Qt 4!
+//    ui->treeViewResult->setIndexWidget(model->index(0,1),new QPushButton("Test"));
 }
 
 GuiMainWindow::~GuiMainWindow()
@@ -99,7 +103,7 @@ void GuiMainWindow::_scan(QString sFileName)
 
         QString sSaveDirectory=xvdgOptions.sLastDirectory+QDir::separator()+"result"; // mb TODO
 
-        ui->widgetScanResult->setData(&scanResult,sSaveDirectory);
+        ui->widgetScanResult->setData(scanResult,sSaveDirectory);
     }
 }
 
@@ -201,18 +205,6 @@ void GuiMainWindow::loadPlugins()
     }
 #endif
     ui->labelModules->setText(tr("%1: %2").arg(tr("Modules")).arg(listPlugins.count()));
-}
-
-void GuiMainWindow::on_pushButtonAdvanced_toggled(bool checked)
-{
-    if(checked)
-    {
-        ui->stackedWidgetMain->setCurrentIndex(1);
-    }
-    else
-    {
-        ui->stackedWidgetMain->setCurrentIndex(0);
-    }
 }
 
 void GuiMainWindow::on_pushButtonAbout_clicked()

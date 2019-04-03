@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>655</width>
-    <height>402</height>
+    <width>657</width>
+    <height>414</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,6 +35,9 @@
     </item>
     <item>
      <widget class="QStackedWidget" name="stackedWidgetMain">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
       <widget class="QWidget" name="pageScan">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <property name="leftMargin">
@@ -85,13 +88,6 @@
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_2">
-            <property name="text">
-             <string>Unpack</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
@@ -112,12 +108,9 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_11">
       <item>
-       <widget class="QPushButton" name="pushButtonAdvanced">
+       <widget class="QPushButton" name="pushButtonOptions">
         <property name="text">
-         <string>Advanced</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
+         <string>Options</string>
         </property>
        </widget>
       </item>
@@ -131,13 +124,6 @@
         </property>
         <property name="text">
          <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonOptions">
-        <property name="text">
-         <string>Options</string>
         </property>
        </widget>
       </item>
