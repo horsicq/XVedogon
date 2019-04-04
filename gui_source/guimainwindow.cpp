@@ -42,10 +42,6 @@ GuiMainWindow::GuiMainWindow(QWidget *parent) :
 
         _scan(sFileName);
     }
-
-//    ui->treeViewResult->setColumnWidth(1,40);
-//    ui->treeViewResult->header()->setSectionResizeMode(0,QHeaderView::Stretch);  // TODO Check Qt 4!
-//    ui->treeViewResult->setIndexWidget(model->index(0,1),new QPushButton("Test"));
 }
 
 GuiMainWindow::~GuiMainWindow()
@@ -101,9 +97,18 @@ void GuiMainWindow::_scan(QString sFileName)
             xvdgOptions.sLastDirectory=fi.absolutePath();
         }
 
-        QString sSaveDirectory=xvdgOptions.sLastDirectory+QDir::separator()+"result"; // mb TODO
+        StaticScanItemModel *model=new StaticScanItemModel(&(scanResult.listRecords),this,3);
+        ui->treeViewResult->setModel(model);
 
-        ui->widgetScanResult->setData(scanResult,sSaveDirectory);
+//        ui->treeViewResult->setColumnWidth(1,40);
+//        ui->treeViewResult->setColumnWidth(2,40);
+
+        ui->treeViewResult->header()->setSectionResizeMode(0,QHeaderView::Stretch);  // TODO Check Qt 4!
+
+        ui->treeViewResult->setIndexWidget(model->index(0,1),new QPushButton("Info"));
+        ui->treeViewResult->setIndexWidget(model->index(0,2),new QPushButton("Unpack"));
+
+        ui->treeViewResult->expandAll();
     }
 }
 
@@ -211,4 +216,17 @@ void GuiMainWindow::on_pushButtonAbout_clicked()
 {
     DialogAbout dialogAbout(this);
     dialogAbout.exec();
+}
+
+void GuiMainWindow::on_pushButtonClear_clicked()
+{
+    ui->treeViewResult->setModel(nullptr);
+}
+
+void GuiMainWindow::on_pushButtonSave_clicked()
+{
+    QString sSaveFileNameDirectory=xvdgOptions.sLastDirectory+QDir::separator()+"result"; // mb TODO
+
+    QAbstractItemModel *pModel=ui->treeViewResult->model();
+    DialogStaticScan::saveResult(this,(StaticScanItemModel *)pModel,sSaveFileNameDirectory);
 }

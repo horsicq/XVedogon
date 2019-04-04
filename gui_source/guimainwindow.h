@@ -59,6 +59,8 @@ private slots:
     void loadPlugins();
 
     void on_pushButtonAbout_clicked();
+    void on_pushButtonClear_clicked();
+    void on_pushButtonSave_clicked();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;

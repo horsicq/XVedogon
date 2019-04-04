@@ -11,23 +11,23 @@ SOURCES += \
         guimainwindow.cpp \
         main_gui.cpp \
         dialogoptions.cpp \
-    dialogabout.cpp
+        dialogabout.cpp
 
 HEADERS += \
         guimainwindow.h \
         dialogoptions.h \
-    dialogabout.h
+        dialogabout.h
 
 FORMS += \
         guimainwindow.ui \
         dialogoptions.ui \
-    dialogabout.ui
+        dialogabout.ui
 
 include(../build.pri)
 
 !contains(XCONFIG, formresult) {
     XCONFIG += formresult
-    include(../../_mylibs/StaticScan/formresult.pri)
+    include(../../_mylibs/StaticScan/dialogstaticscan.pri)
 }
 !contains(XCONFIG, plugin_interface) {
     XCONFIG += plugin_interface
