@@ -31,6 +31,7 @@
 #include "dialogabout.h"
 #ifdef STATIC_PLUGINS
 #include "plugin_zip.h"
+#include "plugin_pe.h"
 #else
 #include <QPluginLoader>
 #include <QDirIterator>
@@ -61,6 +62,8 @@ private slots:
     void on_pushButtonAbout_clicked();
     void on_pushButtonClear_clicked();
     void on_pushButtonSave_clicked();
+
+    void on_pushButtonModules_clicked();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;

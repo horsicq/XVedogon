@@ -36,12 +36,14 @@ include(../build.pri)
 
 
 static_plugins {
-
     DEFINES += "STATIC_PLUGINS=1"
-
     !contains(XCONFIG, plugin_zip) {
         XCONFIG += plugin_zip
         include(../xvdg_plugins/plugin_zip/plugin_zip.pri)
+    }
+    !contains(XCONFIG, plugin_pe) {
+        XCONFIG += plugin_pe
+        include(../../_mylibs/xvdg_plugins/plugin_pe/plugin_pe.pri)
     }
     !contains(XCONFIG, plugin_upx) {
         XCONFIG += plugin_upx

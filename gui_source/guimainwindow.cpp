@@ -105,8 +105,9 @@ void GuiMainWindow::_scan(QString sFileName)
 
         ui->treeViewResult->header()->setSectionResizeMode(0,QHeaderView::Stretch);  // TODO Check Qt 4!
 
-        ui->treeViewResult->setIndexWidget(model->index(0,1),new QPushButton("Info"));
-        ui->treeViewResult->setIndexWidget(model->index(0,2),new QPushButton("Unpack"));
+        ui->treeViewResult->setIndexWidget(model->index(0,1),new QPushButton("Unpack"));
+        ui->treeViewResult->setIndexWidget(model->index(0,2),new QPushButton("Info"));
+
 
         ui->treeViewResult->expandAll();
     }
@@ -160,7 +161,7 @@ void GuiMainWindow::dropEvent(QDropEvent *event)
         {
             QString sFileName=urlList.at(0).toLocalFile();
 
-            sFileName=QBinary::convertFileName(sFileName);
+            sFileName=XBinary::convertFileName(sFileName);
 
             if(xvdgOptions.bScanAfterOpen)
             {
@@ -182,8 +183,9 @@ void GuiMainWindow::loadPlugins()
 {
 #ifdef STATIC_PLUGINS
     Plugin_Zip *pPluginZip=new Plugin_Zip(this);
-
     listPlugins.append(pPluginZip);
+    Plugin_PE *pPluginPE=new Plugin_PE(this);
+    listPlugins.append(pPluginPE);
 #else
 
     QString sPluginPath=QCoreApplication::applicationDirPath()+QDir::separator()+"modules";
@@ -209,7 +211,9 @@ void GuiMainWindow::loadPlugins()
         }
     }
 #endif
-    ui->labelModules->setText(tr("%1: %2").arg(tr("Modules")).arg(listPlugins.count()));
+
+    ui->pushButtonModules->setEnabled(listPlugins.count());
+    ui->pushButtonModules->setText(tr("%1: %2").arg(tr("Modules")).arg(listPlugins.count()));
 }
 
 void GuiMainWindow::on_pushButtonAbout_clicked()
@@ -229,4 +233,9 @@ void GuiMainWindow::on_pushButtonSave_clicked()
 
     QAbstractItemModel *pModel=ui->treeViewResult->model();
     DialogStaticScan::saveResult(this,(StaticScanItemModel *)pModel,sSaveFileNameDirectory);
+}
+
+void GuiMainWindow::on_pushButtonModules_clicked()
+{
+    // TODO
 }
