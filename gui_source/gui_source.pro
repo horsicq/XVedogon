@@ -34,7 +34,6 @@ include(../build.pri)
     include(../xvdg_plugins/plugin_interface.pri)
 }
 
-
 static_plugins {
     DEFINES += "STATIC_PLUGINS=1"
     !contains(XCONFIG, plugin_zip) {
