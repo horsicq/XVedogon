@@ -29,9 +29,13 @@
 #include "dialogstaticscan.h"
 #include "dialogoptions.h"
 #include "dialogabout.h"
+#include "dialogmodules.h"
 #ifdef STATIC_PLUGINS
 #include "plugin_zip.h"
 #include "plugin_pe.h"
+#include "plugin_elf.h"
+#include "plugin_msdos.h"
+#include "plugin_mach.h"
 #else
 #include <QPluginLoader>
 #include <QDirIterator>

@@ -27,7 +27,7 @@ include(../build.pri)
 
 !contains(XCONFIG, formresult) {
     XCONFIG += formresult
-    include(../../_mylibs/StaticScan/dialogstaticscan.pri)
+    include(../StaticScan/dialogstaticscan.pri)
 }
 !contains(XCONFIG, plugin_interface) {
     XCONFIG += plugin_interface
@@ -42,7 +42,7 @@ static_plugins {
     }
     !contains(XCONFIG, plugin_pe) {
         XCONFIG += plugin_pe
-        include(../../_mylibs/xvdg_plugins/plugin_pe/plugin_pe.pri)
+        include(../xvdg_plugins/plugin_pe/plugin_pe.pri)
     }
     !contains(XCONFIG, plugin_upx) {
         XCONFIG += plugin_upx

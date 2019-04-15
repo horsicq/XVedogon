@@ -182,10 +182,11 @@ void GuiMainWindow::on_pushButtonOptions_clicked()
 void GuiMainWindow::loadPlugins()
 {
 #ifdef STATIC_PLUGINS
-    Plugin_Zip *pPluginZip=new Plugin_Zip(this);
-    listPlugins.append(pPluginZip);
-    Plugin_PE *pPluginPE=new Plugin_PE(this);
-    listPlugins.append(pPluginPE);
+    listPlugins.append(new Plugin_Zip(this));
+    listPlugins.append(new Plugin_PE(this));
+    listPlugins.append(new Plugin_ELF(this));
+    listPlugins.append(new Plugin_MSDOS(this));
+    listPlugins.append(new Plugin_MACH(this));
 #else
 
     QString sPluginPath=QCoreApplication::applicationDirPath()+QDir::separator()+"modules";
@@ -237,5 +238,6 @@ void GuiMainWindow::on_pushButtonSave_clicked()
 
 void GuiMainWindow::on_pushButtonModules_clicked()
 {
-    // TODO
+    DialogModules dialogModules(this,&listPlugins);
+    dialogModules.exec();
 }
