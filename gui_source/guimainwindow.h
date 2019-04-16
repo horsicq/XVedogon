@@ -30,6 +30,7 @@
 #include "dialogoptions.h"
 #include "dialogabout.h"
 #include "dialogmodules.h"
+#include "plugin_interface.h"
 #ifdef STATIC_PLUGINS
 #include "plugin_zip.h"
 #include "plugin_pe.h"

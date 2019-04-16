@@ -27,7 +27,31 @@ DialogModules::DialogModules(QWidget *parent, QList<QObject *> *pListPlugins) :
 {
     ui->setupUi(this);
 
+//    echoInterface = qobject_cast<EchoInterface *>(plugin);
+//                if (echoInterface)
+
     this->pListPlugins=pListPlugins;
+
+    int nCount=pListPlugins->count();
+
+    ui->tableWidgetModules->setRowCount(nCount);
+    ui->tableWidgetModules->setColumnCount(1);
+
+    QStringList listHeaderLabels;
+    listHeaderLabels.append(tr("Name"));
+    ui->tableWidgetModules->setHorizontalHeaderLabels(listHeaderLabels);
+
+    for(int i=0;i<nCount;i++)
+    {
+        XvdgPluginInterface *pPluginInterface=qobject_cast<XvdgPluginInterface *>(pListPlugins->at(i));
+        if(pPluginInterface)
+        {
+            QString sPluginName=pPluginInterface->getInfo().sName;
+            QTableWidgetItem *pItem=new QTableWidgetItem(sPluginName);
+
+            ui->tableWidgetModules->setItem(i,0,pItem);
+        }
+    }
 }
 
 DialogModules::~DialogModules()
