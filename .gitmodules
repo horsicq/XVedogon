@@ -10,3 +10,9 @@
 [submodule "XArchive"]
 	path = XArchive
 	url = https://github.com/horsicq/XArchive.git
+[submodule "FormatWidgets"]
+	path = FormatWidgets
+	url = https://github.com/horsicq/FormatWidgets.git
+[submodule "FormatDialogs"]
+	path = FormatDialogs
+	url = https://github.com/horsicq/FormatDialogs.git
