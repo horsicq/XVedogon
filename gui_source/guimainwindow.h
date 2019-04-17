@@ -54,6 +54,16 @@ public:
     explicit GuiMainWindow(QWidget *parent = nullptr);
     ~GuiMainWindow();
 
+private:
+    struct BUTTON_INFO
+    {
+        QString sGUID;
+        XvdgPluginInterface *pPlugin;
+        SpecAbstract::SCAN_STRUCT scanStruct;
+        QModelIndex modelIndex1;
+        QModelIndex modelIndex2;
+    };
+
 private slots:
     void on_pushButtonExit_clicked();
     void on_pushButtonOpenFile_clicked();
@@ -70,6 +80,8 @@ private slots:
 
     void on_pushButtonModules_clicked();
 
+    void handleItem(QList<BUTTON_INFO> *pListButtons, StaticScanItem *pItem, StaticScanItemModel *pModel, QModelIndex modelIndexParent);
+
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
@@ -79,6 +91,7 @@ private:
     Ui::GuiMainWindow *ui;
     XVDG::OPTIONS xvdgOptions;
     QList<QObject *> listPlugins;
+    QList<BUTTON_INFO> listButtons;
 };
 
 #endif // GUIMAINWINDOW_H

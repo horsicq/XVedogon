@@ -105,9 +105,17 @@ void GuiMainWindow::_scan(QString sFileName)
 
         ui->treeViewResult->header()->setSectionResizeMode(0,QHeaderView::Stretch);  // TODO Check Qt 4!
 
-        ui->treeViewResult->setIndexWidget(model->index(0,1),new QPushButton("Unpack"));
-        ui->treeViewResult->setIndexWidget(model->index(0,2),new QPushButton("Info"));
+        listButtons.clear();
 
+        handleItem(&listButtons,model->rootItem(),model,QModelIndex());
+
+        int nModelRowCount=listButtons.count();
+
+        for(int i=0;i<nModelRowCount;i++)
+        {
+            ui->treeViewResult->setIndexWidget(listButtons.at(i).modelIndex1,new QPushButton("Info"));
+            ui->treeViewResult->setIndexWidget(listButtons.at(i).modelIndex2,new QPushButton("Unpack"));
+        }
 
         ui->treeViewResult->expandAll();
     }
@@ -240,4 +248,27 @@ void GuiMainWindow::on_pushButtonModules_clicked()
 {
     DialogModules dialogModules(this,&listPlugins);
     dialogModules.exec();
+}
+
+void GuiMainWindow::handleItem(QList<BUTTON_INFO> *pListButtons, StaticScanItem *pItem, StaticScanItemModel *pModel, QModelIndex modelIndexParent)
+{
+    int nChildCount=pItem->childCount();
+
+    for(int i=0;i<nChildCount;i++)
+    {
+        BUTTON_INFO buttonInfo={nullptr};
+
+        StaticScanItem *pChild=pItem->child(i);
+
+        SpecAbstract::SCAN_STRUCT ss=pChild->scanStruct();
+        buttonInfo.scanStruct=ss;
+
+        QModelIndex modelIndex=pModel->index(i,0,modelIndexParent);
+        buttonInfo.modelIndex1=pModel->index(i,1,modelIndexParent);
+        buttonInfo.modelIndex2=pModel->index(i,2,modelIndexParent);
+
+        pListButtons->append(buttonInfo);
+
+        handleItem(pListButtons,pChild,pModel,modelIndex);
+    }
 }
