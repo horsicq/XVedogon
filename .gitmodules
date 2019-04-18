@@ -16,3 +16,6 @@
 [submodule "FormatDialogs"]
 	path = FormatDialogs
 	url = https://github.com/horsicq/FormatDialogs.git
+[submodule "SpecAbstract"]
+	path = SpecAbstract
+	url = https://github.com/horsicq/SpecAbstract.git

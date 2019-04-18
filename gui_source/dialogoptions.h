@@ -34,13 +34,6 @@ class DialogOptions : public QDialog
 {
     Q_OBJECT
 
-    enum OPTION_PAGES
-    {
-        OP_SCAN=0,
-        OP_APPEARANCE,
-        OP_CONTEXT
-    };
-
 public:
     explicit DialogOptions(QWidget *parent,XVDG::OPTIONS *pOptions);
     ~DialogOptions();
