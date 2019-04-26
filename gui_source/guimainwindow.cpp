@@ -110,11 +110,23 @@ void GuiMainWindow::_scan(QString sFileName)
         handleItem(&listButtons,model->rootItem(),model,QModelIndex());
 
         int nModelRowCount=listButtons.count();
+        int nPluginsCount=listPlugins.count();
 
         for(int i=0;i<nModelRowCount;i++)
         {
-            ui->treeViewResult->setIndexWidget(listButtons.at(i).modelIndex1,new QPushButton("Info"));
-            ui->treeViewResult->setIndexWidget(listButtons.at(i).modelIndex2,new QPushButton("Unpack"));
+            SpecAbstract::SCAN_STRUCT ss=listButtons.at(i).scanStruct;
+            for(int j=0;j<nPluginsCount;j++)
+            {
+                XvdgPluginInterface *pPluginInterface=qobject_cast<XvdgPluginInterface *>(listPlugins.at(j));
+                if(pPluginInterface)
+                {
+                    if(pPluginInterface->isValid(&ss))
+                    {
+                        ui->treeViewResult->setIndexWidget(listButtons.at(i).modelIndex1,new QPushButton("Info"));
+                        ui->treeViewResult->setIndexWidget(listButtons.at(i).modelIndex2,new QPushButton("Unpack"));
+                    }
+                }
+            }
         }
 
         ui->treeViewResult->expandAll();
