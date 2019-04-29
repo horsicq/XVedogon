@@ -55,13 +55,19 @@ public:
     ~GuiMainWindow();
 
 private:
+    struct SRECORD
+    {
+        SpecAbstract::SCAN_STRUCT scanStruct;
+        QModelIndex modelIndex1;
+        QModelIndex modelIndex2;
+    };
+
     struct BUTTON_INFO
     {
         QString sGUID;
         XvdgPluginInterface *pPlugin;
-        SpecAbstract::SCAN_STRUCT scanStruct;
-        QModelIndex modelIndex1;
-        QModelIndex modelIndex2;
+        bool bIsInfo;
+        bool bIsUnpack;
     };
 
 private slots:
@@ -80,7 +86,7 @@ private slots:
 
     void on_pushButtonModules_clicked();
 
-    void handleItem(QList<BUTTON_INFO> *pListButtons, StaticScanItem *pItem, StaticScanItemModel *pModel, QModelIndex modelIndexParent);
+    void handleItem(QList<SRECORD> *pListButtons, StaticScanItem *pItem, StaticScanItemModel *pModel, QModelIndex modelIndexParent);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -91,7 +97,6 @@ private:
     Ui::GuiMainWindow *ui;
     XVDG::OPTIONS xvdgOptions;
     QList<QObject *> listPlugins;
-    QList<BUTTON_INFO> listButtons;
 };
 
 #endif // GUIMAINWINDOW_H

@@ -105,16 +105,17 @@ void GuiMainWindow::_scan(QString sFileName)
 
         ui->treeViewResult->header()->setSectionResizeMode(0,QHeaderView::Stretch);  // TODO Check Qt 4!
 
-        listButtons.clear();
+        QList<SRECORD> listSrecords;
+        listSrecords.clear();
 
-        handleItem(&listButtons,model->rootItem(),model,QModelIndex());
+        handleItem(&listSrecords,model->rootItem(),model,QModelIndex());
 
-        int nModelRowCount=listButtons.count();
+        int nModelRowCount=listSrecords.count();
         int nPluginsCount=listPlugins.count();
 
         for(int i=0;i<nModelRowCount;i++)
         {
-            SpecAbstract::SCAN_STRUCT ss=listButtons.at(i).scanStruct;
+            SpecAbstract::SCAN_STRUCT ss=listSrecords.at(i).scanStruct;
             for(int j=0;j<nPluginsCount;j++)
             {
                 XvdgPluginInterface *pPluginInterface=qobject_cast<XvdgPluginInterface *>(listPlugins.at(j));
@@ -122,8 +123,16 @@ void GuiMainWindow::_scan(QString sFileName)
                 {
                     if(pPluginInterface->isValid(&ss))
                     {
-                        ui->treeViewResult->setIndexWidget(listButtons.at(i).modelIndex1,new QPushButton("Info"));
-                        ui->treeViewResult->setIndexWidget(listButtons.at(i).modelIndex2,new QPushButton("Unpack"));
+                        XvdgPluginInterface::INFO info=pPluginInterface->getInfo();
+
+                        if(info.bIsUnpacker)
+                        {
+                            ui->treeViewResult->setIndexWidget(listSrecords.at(i).modelIndex1,new QPushButton("Unpack"));
+                        }
+                        if(info.bIsViewer)
+                        {
+                            ui->treeViewResult->setIndexWidget(listSrecords.at(i).modelIndex2,new QPushButton("Info"));
+                        }
                     }
                 }
             }
@@ -262,13 +271,13 @@ void GuiMainWindow::on_pushButtonModules_clicked()
     dialogModules.exec();
 }
 
-void GuiMainWindow::handleItem(QList<BUTTON_INFO> *pListButtons, StaticScanItem *pItem, StaticScanItemModel *pModel, QModelIndex modelIndexParent)
+void GuiMainWindow::handleItem(QList<SRECORD> *pListButtons, StaticScanItem *pItem, StaticScanItemModel *pModel, QModelIndex modelIndexParent)
 {
     int nChildCount=pItem->childCount();
 
     for(int i=0;i<nChildCount;i++)
     {
-        BUTTON_INFO buttonInfo={nullptr};
+        SRECORD buttonInfo={0};
 
         StaticScanItem *pChild=pItem->child(i);
 
