@@ -81,6 +81,8 @@ void GuiMainWindow::_scan(QString sFileName)
 {
     if((sFileName!="")&&(QFileInfo(sFileName).isFile()))
     {
+        mapButtonInfos.clear();
+
         SpecAbstract::SCAN_RESULT scanResult;
 
         SpecAbstract::SCAN_OPTIONS options= {0};
@@ -127,11 +129,35 @@ void GuiMainWindow::_scan(QString sFileName)
 
                         if(info.bIsUnpacker)
                         {
-                            ui->treeViewResult->setIndexWidget(listSrecords.at(i).modelIndex1,new QPushButton("Unpack"));
+                            BUTTON_INFO bi={};
+                            QString sGUID=QUuid::createUuid().toString();
+                            bi.pPlugin=pPluginInterface;
+                            bi.biType=BUTTON_INFO_TYPE_UNPACK;
+
+                            mapButtonInfos.insert(sGUID,bi);
+
+                            QPushButton *pPushButton=new QPushButton("Unpack");
+                            pPushButton->setProperty("uid",sGUID);
+
+                            connect(pPushButton,SIGNAL(clicked(bool)),this,SLOT(pushButtonSlot()));
+
+                            ui->treeViewResult->setIndexWidget(listSrecords.at(i).modelIndex1,pPushButton);
                         }
                         if(info.bIsViewer)
                         {
-                            ui->treeViewResult->setIndexWidget(listSrecords.at(i).modelIndex2,new QPushButton("Info"));
+                            BUTTON_INFO bi={};
+                            QString sGUID=QUuid::createUuid().toString();
+                            bi.pPlugin=pPluginInterface;
+                            bi.biType=BUTTON_INFO_TYPE_VIEWER;
+
+                            mapButtonInfos.insert(sGUID,bi);
+
+                            QPushButton *pPushButton=new QPushButton("Info");
+                            pPushButton->setProperty("uid",sGUID);
+
+                            connect(pPushButton,SIGNAL(clicked(bool)),this,SLOT(pushButtonSlot()));
+
+                            ui->treeViewResult->setIndexWidget(listSrecords.at(i).modelIndex2,pPushButton);
                         }
                     }
                 }
@@ -292,4 +318,29 @@ void GuiMainWindow::handleItem(QList<SRECORD> *pListButtons, StaticScanItem *pIt
 
         handleItem(pListButtons,pChild,pModel,modelIndex);
     }
+}
+
+void GuiMainWindow::pushButtonSlot()
+{
+    QPushButton *pPushButton=qobject_cast<QPushButton*>(sender());
+    QString sUID=pPushButton->property("uid").toString();
+    BUTTON_INFO bi=mapButtonInfos.value(sUID);
+
+    if(bi.pPlugin)
+    {
+        if(bi.biType==BUTTON_INFO_TYPE_VIEWER)
+        {
+            DialogViewer dv(this);
+
+            XvdgPluginInterface::DATA data={};
+            data.pParent=&dv;
+            QWidget *pWidget=bi.pPlugin->getViewerWidget(&data);
+
+            dv.addWidget(pWidget);
+
+            dv.exec();
+        }
+    }
+
+    qDebug(sUID.toLatin1().data());
 }

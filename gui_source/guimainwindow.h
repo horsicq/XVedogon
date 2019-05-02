@@ -30,6 +30,7 @@
 #include "dialogoptions.h"
 #include "dialogabout.h"
 #include "dialogmodules.h"
+#include "dialogviewer.h"
 #include "plugin_interface.h"
 #ifdef STATIC_PLUGINS
 #include "plugin_zip.h"
@@ -62,12 +63,17 @@ private:
         QModelIndex modelIndex2;
     };
 
+    enum BUTTON_INFO_TYPE
+    {
+        BUTTON_INFO_TYPE_UNKNOWN=1,
+        BUTTON_INFO_TYPE_VIEWER,
+        BUTTON_INFO_TYPE_UNPACK
+    };
+
     struct BUTTON_INFO
     {
-        QString sGUID;
         XvdgPluginInterface *pPlugin;
-        bool bIsInfo;
-        bool bIsUnpack;
+        BUTTON_INFO_TYPE biType;
     };
 
 private slots:
@@ -87,6 +93,7 @@ private slots:
     void on_pushButtonModules_clicked();
 
     void handleItem(QList<SRECORD> *pListButtons, StaticScanItem *pItem, StaticScanItemModel *pModel, QModelIndex modelIndexParent);
+    void pushButtonSlot();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -97,6 +104,7 @@ private:
     Ui::GuiMainWindow *ui;
     XVDG::OPTIONS xvdgOptions;
     QList<QObject *> listPlugins;
+    QMap<QString,BUTTON_INFO> mapButtonInfos;
 };
 
 #endif // GUIMAINWINDOW_H
