@@ -42,6 +42,7 @@ private slots:
 
 private:
     Ui::DialogViewer *ui;
+    QWidget *pWidget;
 };
 
 #endif // DIALOGVIEWER_H

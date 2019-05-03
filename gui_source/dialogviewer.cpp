@@ -26,15 +26,22 @@ DialogViewer::DialogViewer(QWidget *parent) :
     ui(new Ui::DialogViewer)
 {
     ui->setupUi(this);
+    pWidget=nullptr;
 }
 
 DialogViewer::~DialogViewer()
 {
+    if(pWidget)
+    {
+        delete pWidget;
+    }
+
     delete ui;
 }
 
 void DialogViewer::addWidget(QWidget *pWidget)
 {
+    this->pWidget=pWidget;
     ui->verticalLayoutPluginWidget->addWidget(pWidget);
 }
 

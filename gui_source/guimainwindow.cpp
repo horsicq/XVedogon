@@ -133,6 +133,8 @@ void GuiMainWindow::_scan(QString sFileName)
                             QString sGUID=QUuid::createUuid().toString();
                             bi.pPlugin=pPluginInterface;
                             bi.biType=BUTTON_INFO_TYPE_UNPACK;
+                            bi.nOffset=ss.nOffset;
+                            bi.nSize=ss.nSize;
 
                             mapButtonInfos.insert(sGUID,bi);
 
@@ -149,6 +151,8 @@ void GuiMainWindow::_scan(QString sFileName)
                             QString sGUID=QUuid::createUuid().toString();
                             bi.pPlugin=pPluginInterface;
                             bi.biType=BUTTON_INFO_TYPE_VIEWER;
+                            bi.nOffset=ss.nOffset;
+                            bi.nSize=ss.nSize;
 
                             mapButtonInfos.insert(sGUID,bi);
 
@@ -328,17 +332,35 @@ void GuiMainWindow::pushButtonSlot()
 
     if(bi.pPlugin)
     {
-        if(bi.biType==BUTTON_INFO_TYPE_VIEWER)
+        QFile file;
+        file.setFileName(ui->lineEditFileName->text());
+
+        if(file.open(QIODevice::ReadWrite)) // TODO readOnly
         {
-            DialogViewer dv(this);
+            SubDevice sd(&file,bi.nOffset,bi.nSize);
 
-            XvdgPluginInterface::DATA data={};
-            data.pParent=&dv;
-            QWidget *pWidget=bi.pPlugin->getViewerWidget(&data);
+            sd.open(file.openMode());
 
-            dv.addWidget(pWidget);
 
-            dv.exec();
+            if(bi.biType==BUTTON_INFO_TYPE_VIEWER)
+            {
+                XvdgPluginInterface::DATA data={};
+                data.pDevice=&sd;
+
+                QWidget *pWidget=bi.pPlugin->getViewerWidget(&data);
+
+                if(pWidget)
+                {
+                    DialogViewer dv(this);
+
+                    dv.addWidget(pWidget);
+
+                    dv.exec();
+                }
+            }
+
+            sd.close();
+            file.close();
         }
     }
 

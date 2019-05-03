@@ -74,6 +74,8 @@ private:
     {
         XvdgPluginInterface *pPlugin;
         BUTTON_INFO_TYPE biType;
+        qint64 nOffset;
+        qint64 nSize;
     };
 
 private slots:
