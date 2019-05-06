@@ -32,7 +32,7 @@ class DialogViewer : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogViewer(QWidget *parent = nullptr);
+    explicit DialogViewer(QWidget *parent=nullptr);
     ~DialogViewer();
 
     void addWidget(QWidget *pWidget);

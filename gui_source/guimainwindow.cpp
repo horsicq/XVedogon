@@ -335,12 +335,11 @@ void GuiMainWindow::pushButtonSlot()
         QFile file;
         file.setFileName(ui->lineEditFileName->text());
 
-        if(file.open(QIODevice::ReadWrite)) // TODO readOnly
+        if(XBinary::tryToOpen(&file)) // TODO readOnly
         {
             SubDevice sd(&file,bi.nOffset,bi.nSize);
 
             sd.open(file.openMode());
-
 
             if(bi.biType==BUTTON_INFO_TYPE_VIEWER)
             {

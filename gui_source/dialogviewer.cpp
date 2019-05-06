@@ -27,6 +27,8 @@ DialogViewer::DialogViewer(QWidget *parent) :
 {
     ui->setupUi(this);
     pWidget=nullptr;
+
+    setWindowFlags(windowFlags()|Qt::WindowMinMaxButtonsHint);
 }
 
 DialogViewer::~DialogViewer()
