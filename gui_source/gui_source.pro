@@ -42,6 +42,10 @@ include(../build.pri)
 
 static_plugins {
     DEFINES += "STATIC_PLUGINS=1"
+    !contains(XCONFIG, plugin_binary) {
+        XCONFIG += plugin_binary
+        include(../../_mylibs/xvdg_plugins/plugin_binary/plugin_binary.pri)
+    }
     !contains(XCONFIG, plugin_zip) {
         XCONFIG += plugin_zip
         include(../xvdg_plugins/plugin_zip/plugin_zip.pri)

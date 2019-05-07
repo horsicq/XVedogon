@@ -241,6 +241,7 @@ void GuiMainWindow::on_pushButtonOptions_clicked()
 void GuiMainWindow::loadPlugins()
 {
 #ifdef STATIC_PLUGINS
+    listPlugins.append(new Plugin_Binary(this));
     listPlugins.append(new Plugin_Zip(this));
     listPlugins.append(new Plugin_PE(this));
     listPlugins.append(new Plugin_ELF(this));
