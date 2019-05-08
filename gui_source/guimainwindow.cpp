@@ -363,6 +363,4 @@ void GuiMainWindow::pushButtonSlot()
             file.close();
         }
     }
-
-    qDebug(sUID.toLatin1().data());
 }
