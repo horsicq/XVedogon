@@ -8,26 +8,26 @@ TEMPLATE = app
 CONFIG += c++11
 
 SOURCES += \
-    dialogviewer.cpp \
+        dialogviewer.cpp \
         guimainwindow.cpp \
         main_gui.cpp \
         dialogoptions.cpp \
         dialogabout.cpp \
-    dialogmodules.cpp
+        dialogmodules.cpp
 
 HEADERS += \
-    dialogviewer.h \
+        dialogviewer.h \
         guimainwindow.h \
         dialogoptions.h \
         dialogabout.h \
-    dialogmodules.h
+        dialogmodules.h
 
 FORMS += \
-    dialogviewer.ui \
+        dialogviewer.ui \
         guimainwindow.ui \
         dialogoptions.ui \
         dialogabout.ui \
-    dialogmodules.ui
+        dialogmodules.ui
 
 include(../build.pri)
 

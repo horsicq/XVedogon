@@ -127,7 +127,21 @@ void GuiMainWindow::_scan(QString sFileName)
                     {
                         XvdgPluginInterface::INFO info=pPluginInterface->getInfo();
 
+                        bool bUnpacker=false;
+
                         if(info.bIsUnpacker)
+                        {
+                            if(!info.bIsRunTime)
+                            {
+                                bUnpacker=true;
+                            }
+                            else if((info.bIsRunTime)&&(ss.parentId.filepart==SpecAbstract::RECORD_FILEPART_HEADER))
+                            {
+                                bUnpacker=true;
+                            }
+                        }
+
+                        if(bUnpacker)
                         {
                             BUTTON_INFO bi={};
                             QString sGUID=QUuid::createUuid().toString();
@@ -247,6 +261,7 @@ void GuiMainWindow::loadPlugins()
     listPlugins.append(new Plugin_ELF(this));
     listPlugins.append(new Plugin_MSDOS(this));
     listPlugins.append(new Plugin_MACH(this));
+    listPlugins.append(new Plugin_UPX(this));
 #else
 
     QString sPluginPath=QCoreApplication::applicationDirPath()+QDir::separator()+"modules";

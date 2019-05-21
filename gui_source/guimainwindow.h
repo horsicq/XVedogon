@@ -39,6 +39,7 @@
 #include "plugin_elf.h"
 #include "plugin_msdos.h"
 #include "plugin_mach.h"
+#include "plugin_upx.h"
 #else
 #include <QPluginLoader>
 #include <QDirIterator>
@@ -73,6 +74,7 @@ private:
 
     struct BUTTON_INFO
     {
+        // TODO RunTime, directory
         XvdgPluginInterface *pPlugin;
         BUTTON_INFO_TYPE biType;
         qint64 nOffset;
