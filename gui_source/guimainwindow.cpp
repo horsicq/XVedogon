@@ -146,7 +146,7 @@ void GuiMainWindow::_scan(QString sFileName)
                             BUTTON_INFO bi={};
                             QString sGUID=QUuid::createUuid().toString();
                             bi.pPlugin=pPluginInterface;
-                            bi.biType=BUTTON_INFO_TYPE_UNPACK;
+                            bi.biType=BUTTON_INFO_TYPE_RTUNPACK;
                             bi.nOffset=ss.nOffset;
                             bi.nSize=ss.nSize;
 
@@ -348,17 +348,17 @@ void GuiMainWindow::pushButtonSlot()
 
     if(bi.pPlugin)
     {
-        QFile file;
-        file.setFileName(ui->lineEditFileName->text());
-
-        if(XBinary::tryToOpen(&file)) // TODO readOnly
+        if(bi.biType==BUTTON_INFO_TYPE_VIEWER)
         {
-            SubDevice sd(&file,bi.nOffset,bi.nSize);
+            QFile file;
+            file.setFileName(ui->lineEditFileName->text());
 
-            sd.open(file.openMode());
-
-            if(bi.biType==BUTTON_INFO_TYPE_VIEWER)
+            if(XBinary::tryToOpen(&file)) // TODO readOnly
             {
+                SubDevice sd(&file,bi.nOffset,bi.nSize);
+
+                sd.open(file.openMode());
+
                 XvdgPluginInterface::DATA data={};
                 data.pDevice=&sd;
 
@@ -372,10 +372,14 @@ void GuiMainWindow::pushButtonSlot()
 
                     dv.exec();
                 }
-            }
 
-            sd.close();
-            file.close();
+                sd.close();
+                file.close();
+            }
+        }
+        else if(bi.biType==BUTTON_INFO_TYPE_RTUNPACK)
+        {
+            bi.pPlugin->rtUnpack(ui->lineEditFileName->text());
         }
     }
 }

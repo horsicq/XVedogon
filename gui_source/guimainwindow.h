@@ -69,7 +69,7 @@ private:
     {
         BUTTON_INFO_TYPE_UNKNOWN=1,
         BUTTON_INFO_TYPE_VIEWER,
-        BUTTON_INFO_TYPE_UNPACK
+        BUTTON_INFO_TYPE_RTUNPACK // TODO Static
     };
 
     struct BUTTON_INFO
