@@ -117,6 +117,7 @@ void GuiMainWindow::_scan(QString sFileName)
 
         for(int i=0;i<nModelRowCount;i++)
         {
+            // TODO move to utils
             SpecAbstract::SCAN_STRUCT ss=listSrecords.at(i).scanStruct;
             for(int j=0;j<nPluginsCount;j++)
             {
@@ -254,39 +255,7 @@ void GuiMainWindow::on_pushButtonOptions_clicked()
 
 void GuiMainWindow::loadPlugins()
 {
-#ifdef STATIC_PLUGINS
-    listPlugins.append(new Plugin_Binary(this));
-    listPlugins.append(new Plugin_Zip(this));
-    listPlugins.append(new Plugin_PE(this));
-    listPlugins.append(new Plugin_ELF(this));
-    listPlugins.append(new Plugin_MSDOS(this));
-    listPlugins.append(new Plugin_MACH(this));
-    listPlugins.append(new Plugin_UPX(this));
-#else
-
-    QString sPluginPath=QCoreApplication::applicationDirPath()+QDir::separator()+"modules";
-
-    QDirIterator it(sPluginPath,QStringList() << "*.*",QDir::Files,QDirIterator::NoIteratorFlags);
-    while(it.hasNext())
-    {
-        QPluginLoader *pPluginLoader=new QPluginLoader(this);
-        pPluginLoader->setFileName(it.next());
-        bool bLoaded=false;
-        if(pPluginLoader->load())
-        {
-            QObject *pPlugin=pPluginLoader->instance();
-            if(pPlugin)
-            {
-                listPlugins.append(pPlugin);
-                bLoaded=true;
-            }
-        }
-        if(!bLoaded)
-        {
-            delete pPluginLoader;
-        }
-    }
-#endif
+    listPlugins=Xvdg_utils::getPluginList(this);
 
     ui->pushButtonModules->setEnabled(listPlugins.count());
     ui->pushButtonModules->setText(tr("%1: %2").arg(tr("Modules")).arg(listPlugins.count()));

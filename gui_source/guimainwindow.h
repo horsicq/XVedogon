@@ -32,18 +32,7 @@
 #include "dialogmodules.h"
 #include "dialogviewer.h"
 #include "plugin_interface.h"
-#ifdef STATIC_PLUGINS
-#include "plugin_binary.h"
-#include "plugin_zip.h"
-#include "plugin_pe.h"
-#include "plugin_elf.h"
-#include "plugin_msdos.h"
-#include "plugin_mach.h"
-#include "plugin_upx.h"
-#else
-#include <QPluginLoader>
-#include <QDirIterator>
-#endif
+#include "xvdg_utils.h"
 
 namespace Ui {
 class GuiMainWindow;
