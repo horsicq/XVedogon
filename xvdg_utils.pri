@@ -12,6 +12,11 @@ SOURCES += \
     include(xvdg_plugins/plugin_interface.pri)
 }
 
+!contains(XCONFIG, staticscan) {
+    XCONFIG += staticscan
+    include(../_mylibs/StaticScan/staticscan.pri)
+}
+
 static_plugins {
     DEFINES += "STATIC_PLUGINS=1"
     !contains(XCONFIG, plugin_binary) {
@@ -43,5 +48,3 @@ static_plugins {
         include(xvdg_plugins/plugin_upx/plugin_upx.pri)
     }
 }
-
-

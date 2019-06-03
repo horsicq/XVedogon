@@ -113,72 +113,66 @@ void GuiMainWindow::_scan(QString sFileName)
         handleItem(&listSrecords,model->rootItem(),model,QModelIndex());
 
         int nModelRowCount=listSrecords.count();
-        int nPluginsCount=listPlugins.count();
 
         for(int i=0;i<nModelRowCount;i++)
         {
             // TODO move to utils
             SpecAbstract::SCAN_STRUCT ss=listSrecords.at(i).scanStruct;
-            for(int j=0;j<nPluginsCount;j++)
+            XvdgPluginInterface *pPluginInterface=Xvdg_utils::getPlugin(&listPlugins,ss);
+
+            if(pPluginInterface)
             {
-                XvdgPluginInterface *pPluginInterface=qobject_cast<XvdgPluginInterface *>(listPlugins.at(j));
-                if(pPluginInterface)
+                XvdgPluginInterface::INFO info=pPluginInterface->getInfo();
+
+                bool bUnpacker=false;
+
+                if(info.bIsUnpacker)
                 {
-                    if(pPluginInterface->isValid(&ss))
+                    if(!info.bIsRunTime)
                     {
-                        XvdgPluginInterface::INFO info=pPluginInterface->getInfo();
-
-                        bool bUnpacker=false;
-
-                        if(info.bIsUnpacker)
-                        {
-                            if(!info.bIsRunTime)
-                            {
-                                bUnpacker=true;
-                            }
-                            else if((info.bIsRunTime)&&(ss.parentId.filepart==SpecAbstract::RECORD_FILEPART_HEADER))
-                            {
-                                bUnpacker=true;
-                            }
-                        }
-
-                        if(bUnpacker)
-                        {
-                            BUTTON_INFO bi={};
-                            QString sGUID=QUuid::createUuid().toString();
-                            bi.pPlugin=pPluginInterface;
-                            bi.biType=BUTTON_INFO_TYPE_RTUNPACK;
-                            bi.nOffset=ss.nOffset;
-                            bi.nSize=ss.nSize;
-
-                            mapButtonInfos.insert(sGUID,bi);
-
-                            QPushButton *pPushButton=new QPushButton("Unpack");
-                            pPushButton->setProperty("uid",sGUID);
-
-                            connect(pPushButton,SIGNAL(clicked(bool)),this,SLOT(pushButtonSlot()));
-
-                            ui->treeViewResult->setIndexWidget(listSrecords.at(i).modelIndex1,pPushButton);
-                        }
-                        if(info.bIsViewer)
-                        {
-                            BUTTON_INFO bi={};
-                            QString sGUID=QUuid::createUuid().toString();
-                            bi.pPlugin=pPluginInterface;
-                            bi.biType=BUTTON_INFO_TYPE_VIEWER;
-                            bi.nOffset=ss.nOffset;
-                            bi.nSize=ss.nSize;
-
-                            mapButtonInfos.insert(sGUID,bi);
-
-                            QPushButton *pPushButton=new QPushButton("Info");
-                            pPushButton->setProperty("uid",sGUID);
-
-                            connect(pPushButton,SIGNAL(clicked(bool)),this,SLOT(pushButtonSlot()));
-
-                            ui->treeViewResult->setIndexWidget(listSrecords.at(i).modelIndex2,pPushButton);
-                        }
+                        bUnpacker=true;
                     }
+                    else if((info.bIsRunTime)&&(ss.parentId.filepart==SpecAbstract::RECORD_FILEPART_HEADER)) // TODO copy to tmp path and run if it is in overlay
+                    {
+                        bUnpacker=true;
+                    }
+                }
+
+                if(bUnpacker)
+                {
+                    BUTTON_INFO bi={};
+                    QString sGUID=QUuid::createUuid().toString();
+                    bi.pPlugin=pPluginInterface;
+                    bi.biType=BUTTON_INFO_TYPE_RTUNPACK;
+                    bi.nOffset=ss.nOffset;
+                    bi.nSize=ss.nSize;
+
+                    mapButtonInfos.insert(sGUID,bi);
+
+                    QPushButton *pPushButton=new QPushButton(tr("Unpack"));
+                    pPushButton->setProperty("uid",sGUID);
+
+                    connect(pPushButton,SIGNAL(clicked(bool)),this,SLOT(pushButtonSlot()));
+
+                    ui->treeViewResult->setIndexWidget(listSrecords.at(i).modelIndex1,pPushButton);
+                }
+                if(info.bIsViewer)
+                {
+                    BUTTON_INFO bi={};
+                    QString sGUID=QUuid::createUuid().toString();
+                    bi.pPlugin=pPluginInterface;
+                    bi.biType=BUTTON_INFO_TYPE_VIEWER;
+                    bi.nOffset=ss.nOffset;
+                    bi.nSize=ss.nSize;
+
+                    mapButtonInfos.insert(sGUID,bi);
+
+                    QPushButton *pPushButton=new QPushButton(tr("Info"));
+                    pPushButton->setProperty("uid",sGUID);
+
+                    connect(pPushButton,SIGNAL(clicked(bool)),this,SLOT(pushButtonSlot()));
+
+                    ui->treeViewResult->setIndexWidget(listSrecords.at(i).modelIndex2,pPushButton);
                 }
             }
         }
@@ -329,6 +323,7 @@ void GuiMainWindow::pushButtonSlot()
                 sd.open(file.openMode());
 
                 XvdgPluginInterface::DATA data={};
+                data.pParent=this;
                 data.pDevice=&sd;
 
                 QWidget *pWidget=bi.pPlugin->getViewerWidget(&data);
