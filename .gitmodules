@@ -19,3 +19,9 @@
 [submodule "SpecAbstract"]
 	path = SpecAbstract
 	url = https://github.com/horsicq/SpecAbstract.git
+[submodule "XDebugger"]
+	path = XDebugger
+	url = https://github.com/horsicq/XDebugger.git
+[submodule "XProcess"]
+	path = XProcess
+	url = https://github.com/horsicq/XProcess.git
