@@ -32,7 +32,9 @@ DialogModules::DialogModules(QWidget *parent, QList<QObject *> *pListPlugins) :
 
     this->pListPlugins=pListPlugins;
 
-    int nCount=pListPlugins->count();
+    QList<XvdgPluginInterface::INFO> listInfos=Xvdg_utils::getPluginInfos(pListPlugins);
+
+    int nCount=listInfos.count();
 
     ui->tableWidgetModules->setRowCount(nCount);
     ui->tableWidgetModules->setColumnCount(1);
@@ -43,14 +45,9 @@ DialogModules::DialogModules(QWidget *parent, QList<QObject *> *pListPlugins) :
 
     for(int i=0;i<nCount;i++)
     {
-        XvdgPluginInterface *pPluginInterface=qobject_cast<XvdgPluginInterface *>(pListPlugins->at(i));
-        if(pPluginInterface)
-        {
-            QString sPluginName=pPluginInterface->getInfo().sName;
-            QTableWidgetItem *pItem=new QTableWidgetItem(sPluginName);
+        QTableWidgetItem *pItem=new QTableWidgetItem(Xvdg_utils::infoToString(listInfos.at(i)));
 
-            ui->tableWidgetModules->setItem(i,0,pItem);
-        }
+        ui->tableWidgetModules->setItem(i,0,pItem);
     }
 }
 

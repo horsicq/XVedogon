@@ -22,7 +22,7 @@
 #define DIALOGMODULES_H
 
 #include <QDialog>
-#include "plugin_interface.h"
+#include "xvdg_utils.h"
 
 namespace Ui {
 class DialogModules;

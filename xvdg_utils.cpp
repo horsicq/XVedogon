@@ -81,3 +81,32 @@ XvdgPluginInterface *Xvdg_utils::getPlugin(QList<QObject *> *pListPlugins,SpecAb
 
     return pResult;
 }
+
+QList<XvdgPluginInterface::INFO> Xvdg_utils::getPluginInfos(QList<QObject *> *pListPlugins)
+{
+    QList<XvdgPluginInterface::INFO> listResult;
+
+    int nCount=pListPlugins->count();
+
+    for(int i=0;i<nCount;i++)
+    {
+        XvdgPluginInterface *pPluginInterface=qobject_cast<XvdgPluginInterface *>(pListPlugins->at(i));
+        if(pPluginInterface)
+        {
+            XvdgPluginInterface::INFO info=pPluginInterface->getInfo();
+
+            listResult.append(info);
+        }
+    }
+
+    return listResult;
+}
+
+QString Xvdg_utils::infoToString(XvdgPluginInterface::INFO info)
+{
+    QString sResult;
+
+    sResult=QString("%1 - (%2) [%3]").arg(info.sName).arg(info.sVersion).arg(info.sDescription);
+
+    return sResult;
+}

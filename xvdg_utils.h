@@ -43,6 +43,8 @@ class Xvdg_utils
 public:
     static QList<QObject *> getPluginList(QObject *pParent);
     static XvdgPluginInterface *getPlugin(QList<QObject *> *pListPlugins,SpecAbstract::SCAN_STRUCT ss);
+    static QList<XvdgPluginInterface::INFO> getPluginInfos(QList<QObject *> *pListPlugins);
+    static QString infoToString(XvdgPluginInterface::INFO info);
 };
 
 #endif // XVDG_UTILS_H
