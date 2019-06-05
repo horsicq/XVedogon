@@ -14,7 +14,7 @@ SOURCES += \
 
 !contains(XCONFIG, staticscan) {
     XCONFIG += staticscan
-    include(../_mylibs/StaticScan/staticscan.pri)
+    include(StaticScan/staticscan.pri))
 }
 
 static_plugins {
