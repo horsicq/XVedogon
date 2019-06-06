@@ -124,21 +124,7 @@ void GuiMainWindow::_scan(QString sFileName)
             {
                 XvdgPluginInterface::INFO info=pPluginInterface->getInfo();
 
-                bool bUnpacker=false;
-
                 if(info.bIsUnpacker)
-                {
-                    if(!info.bIsRunTime)
-                    {
-                        bUnpacker=true;
-                    }
-                    else if((info.bIsRunTime)&&(ss.parentId.filepart==SpecAbstract::RECORD_FILEPART_HEADER)) // TODO copy to tmp path and run if it is in overlay
-                    {
-                        bUnpacker=true;
-                    }
-                }
-
-                if(bUnpacker)
                 {
                     BUTTON_INFO bi={};
                     QString sGUID=QUuid::createUuid().toString();

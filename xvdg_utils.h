@@ -45,6 +45,7 @@ public:
     static XvdgPluginInterface *getPlugin(QList<QObject *> *pListPlugins,SpecAbstract::SCAN_STRUCT ss);
     static QList<XvdgPluginInterface::INFO> getPluginInfos(QList<QObject *> *pListPlugins);
     static QString infoToString(XvdgPluginInterface::INFO info);
+    static XvdgPluginInterface *getPluginByName(QList<QObject *> *pListPlugins,QString sName);
 };
 
 #endif // XVDG_UTILS_H

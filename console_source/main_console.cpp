@@ -53,19 +53,34 @@ int main(int argc, char *argv[])
     QCommandLineOption clScan(QStringList()<<"S"<<"scan","Scan.");
     QCommandLineOption clScanOverlay(QStringList()<<"o"<<"scanoverlay","Scan overlay.");
     QCommandLineOption clDeepScan(QStringList()<<"d"<<"deepscan","Deep scan.");
-    QCommandLineOption clResultAsXml(QStringList()<<"x"<<"xml","Scan result as XML.");   
+    QCommandLineOption clResultAsXml(QStringList()<<"x"<<"xml","Scan result as XML.");
+    QCommandLineOption clUnpack(QStringList()<<"U"<<"unpack","Unpack <method>.","method");
 
     parser.addOption(clModules);
     parser.addOption(clScan);
     parser.addOption(clScanOverlay);
     parser.addOption(clDeepScan);
     parser.addOption(clResultAsXml);
+    parser.addOption(clUnpack);
     parser.addHelpOption();
     parser.addVersionOption();
 
     parser.process(app);
 
     bool bIsUsed=false;
+    XvdgPluginInterface *pUnpacker=nullptr;
+
+    if(parser.isSet(clUnpack))
+    {
+        bIsUsed=true;
+
+        QString sUnpackMethod=parser.value(clUnpack);
+        pUnpacker=Xvdg_utils::getPluginByName(&listModules,sUnpackMethod);
+        if((!pUnpacker)||(!pUnpacker->getInfo().bIsUnpacker))
+        {
+            co.infoMessage(QString("Cannot find unpack module: %1").arg(sUnpackMethod),0);
+        }
+    }
 
     if(parser.isSet(clModules))
     {
@@ -143,11 +158,21 @@ int main(int argc, char *argv[])
                     if(pPlugin)
                     {
                         XvdgPluginInterface::INFO info=pPlugin->getInfo();
-                        if(info.bIsUnpacker)
+                        if(info.bIsUnpacker) // TODO not overlay!
                         {
-                            printf("Available unpack module: %s\n",pPlugin->getInfo().sName.toLatin1().data());
+                            printf("Available unpack method: %s\n",pPlugin->getInfo().sName.toLatin1().data());
                         }
                     }
+                }
+            }
+
+            if(pUnpacker)
+            {
+                XvdgPluginInterface::INFO info=pUnpacker->getInfo();
+
+                if(info.bIsRunTime)
+                {
+                    pUnpacker->rtUnpack(sFileName);
                 }
             }
         }

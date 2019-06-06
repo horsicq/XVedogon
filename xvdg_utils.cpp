@@ -110,3 +110,25 @@ QString Xvdg_utils::infoToString(XvdgPluginInterface::INFO info)
 
     return sResult;
 }
+
+XvdgPluginInterface *Xvdg_utils::getPluginByName(QList<QObject *> *pListPlugins, QString sName)
+{
+    XvdgPluginInterface *pResult=nullptr;
+
+    int nCount=pListPlugins->count();
+
+    for(int i=0;i<nCount;i++)
+    {
+        XvdgPluginInterface *pPluginInterface=qobject_cast<XvdgPluginInterface *>(pListPlugins->at(i));
+        if(pPluginInterface)
+        {
+            if(pPluginInterface->getInfo().sName==sName)
+            {
+                pResult=pPluginInterface;
+                break;
+            }
+        }
+    }
+
+    return pResult;
+}
