@@ -86,7 +86,7 @@ void GuiMainWindow::_scan(QString sFileName)
         SpecAbstract::SCAN_RESULT scanResult;
 
         SpecAbstract::SCAN_OPTIONS options= {0};
-        options.bScanOverlay=ui->checkBoxScanOverlay->isChecked();
+        options.bRecursive=ui->checkBoxRecursive->isChecked();
         options.bDeepScan=ui->checkBoxDeepScan->isChecked();
 
         DialogStaticScan ds(this);
@@ -188,7 +188,7 @@ void GuiMainWindow::adjust()
     setWindowFlags(wf);
 
     ui->checkBoxDeepScan->setChecked(xvdgOptions.bDeepScan);
-    ui->checkBoxScanOverlay->setChecked(xvdgOptions.bScanOverlay);
+    ui->checkBoxRecursive->setChecked(xvdgOptions.bRecursive);
 
     show();
 }

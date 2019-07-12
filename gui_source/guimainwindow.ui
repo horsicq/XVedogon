@@ -36,9 +36,9 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QCheckBox" name="checkBoxScanOverlay">
+       <widget class="QCheckBox" name="checkBoxRecursive">
         <property name="text">
-         <string>Scan overlay</string>
+         <string>Recursive</string>
         </property>
        </widget>
       </item>
