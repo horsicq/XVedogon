@@ -51,14 +51,14 @@ int main(int argc, char *argv[])
 
     QCommandLineOption clModules(QStringList()<<"m"<<"modules","Show all modules.");
     QCommandLineOption clScan(QStringList()<<"S"<<"scan","Scan.");
-    QCommandLineOption clScanOverlay(QStringList()<<"o"<<"scanoverlay","Scan overlay.");
+    QCommandLineOption clRecursive(QStringList()<<"r"<<"recursive","Recursive.");
     QCommandLineOption clDeepScan(QStringList()<<"d"<<"deepscan","Deep scan.");
     QCommandLineOption clResultAsXml(QStringList()<<"x"<<"xml","Scan result as XML.");
     QCommandLineOption clUnpack(QStringList()<<"U"<<"unpack","Unpack <method>.","method");
 
     parser.addOption(clModules);
     parser.addOption(clScan);
-    parser.addOption(clScanOverlay);
+    parser.addOption(clRecursive);
     parser.addOption(clDeepScan);
     parser.addOption(clResultAsXml);
     parser.addOption(clUnpack);
@@ -133,16 +133,17 @@ int main(int argc, char *argv[])
                 printf("%s:\n",sFileName.toLatin1().data());
             }
 
-            if(     parser.isSet(clScan)||
-                    parser.isSet(clScanOverlay)||
-                    parser.isSet(clDeepScan)||
-                    parser.isSet(clResultAsXml))
+            if(     parser.isSet(clScan)        ||
+                    parser.isSet(clRecursive)   ||
+                    parser.isSet(clDeepScan)    ||
+                    parser.isSet(clResultAsXml) ||
+                    (!parser.isSet(clUnpack)))
             {
                 // Scan
                 SpecAbstract::SCAN_OPTIONS scanOptions={};
 
                 scanOptions.bDeepScan=parser.isSet(clDeepScan);
-                scanOptions.bScanOverlay=parser.isSet(clScanOverlay);
+                scanOptions.bRecursive=parser.isSet(clRecursive);
                 scanOptions.bResultAsXML=parser.isSet(clResultAsXml);
 
                 SpecAbstract::SCAN_RESULT scanResult=StaticScan::processFile(sFileName,&scanOptions);
