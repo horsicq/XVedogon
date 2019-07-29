@@ -1,6 +1,8 @@
 QT       += core gui widgets
 
-CONFIG += static_plugins
+CONFIG(debug, debug|release) {
+    CONFIG += static_plugins
+}
 
 TARGET = xvdg
 TEMPLATE = app

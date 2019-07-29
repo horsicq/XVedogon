@@ -1,5 +1,6 @@
 TEMPLATE      = subdirs
 
-SUBDIRS        += 	gui_source
-#SUBDIRS        += 	console_source
+#SUBDIRS        += 	gui_source
+SUBDIRS        += 	console_source
 #SUBDIRS        += 	test_source
+SUBDIRS        += 	xvdg_plugins

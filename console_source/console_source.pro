@@ -1,11 +1,13 @@
 QT += core
 QT -= gui
 
-CONFIG += static_plugins
+#CONFIG(debug, debug|release) {
+#    CONFIG += static_plugins
+#}
 
 CONFIG += c++11
 
-TARGET = console_source
+TARGET = xvdgc
 CONFIG += console
 CONFIG -= app_bundle
 

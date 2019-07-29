@@ -33,7 +33,8 @@ QList<QObject *> Xvdg_utils::getPluginList(QObject *pParent)
     listResult.append(new Plugin_MACH(pParent));
     listResult.append(new Plugin_UPX(pParent));
 #else
-    QString sPluginPath=QCoreApplication::applicationDirPath()+QDir::separator()+"modules";
+//    QString sPluginPath=QCoreApplication::applicationDirPath()+QDir::separator()+"modules";
+    QString sPluginPath="C:\\tmp_build\\qt5\\xvdg_source\\xvdg_plugins\\build\\debug";
 
     QDirIterator it(sPluginPath,QStringList() << "*.*",QDir::Files,QDirIterator::NoIteratorFlags);
     while(it.hasNext())
