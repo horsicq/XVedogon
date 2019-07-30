@@ -22,6 +22,8 @@
 #define DIALOGVIEWER_H
 
 #include <QDialog>
+#include "viewer_plugin_interface.h"
+#include "xvdg_utils.h"
 
 namespace Ui {
 class DialogViewer;
@@ -32,10 +34,8 @@ class DialogViewer : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogViewer(QWidget *parent=nullptr);
+    explicit DialogViewer(QObject *pPlugin,QIODevice *pDevice,QWidget *parent);
     ~DialogViewer();
-
-    void addWidget(QWidget *pWidget);
 
 private slots:
     void on_pushButtonOK_clicked();

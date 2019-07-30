@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 
     QCoreApplication app(argc, argv);
 
-    QList<QObject *> listModules=Xvdg_utils::getPluginList(&app);
+    QList<QObject *> listModules=Xvdg_utils::getUnpackerPluginList(&app);
 
     ConsoleOutput co;
 
@@ -56,6 +56,8 @@ int main(int argc, char *argv[])
     QCommandLineOption clResultAsXml(QStringList()<<"x"<<"xml","Scan result as XML.");
     QCommandLineOption clUnpack(QStringList()<<"U"<<"unpack","Unpack <method>.","method");
 
+    // TODO options for specific unpacker: -O OPTION:VALUE
+
     parser.addOption(clModules);
     parser.addOption(clScan);
     parser.addOption(clRecursive);
@@ -68,15 +70,15 @@ int main(int argc, char *argv[])
     parser.process(app);
 
     bool bIsUsed=false;
-    XvdgPluginInterface *pUnpacker=nullptr;
+    XvdgUnpackerPluginInterface *pUnpacker=nullptr;
 
     if(parser.isSet(clUnpack))
     {
         bIsUsed=true;
 
         QString sUnpackMethod=parser.value(clUnpack);
-        pUnpacker=Xvdg_utils::getPluginByName(&listModules,sUnpackMethod);
-        if((!pUnpacker)||(!pUnpacker->getInfo().bIsUnpacker))
+        pUnpacker=Xvdg_utils::getUnpackerPluginByName(&listModules,sUnpackMethod);
+        if(!pUnpacker)
         {
             co.infoMessage(QString("Cannot find unpack module: %1").arg(sUnpackMethod),0);
         }
@@ -89,13 +91,13 @@ int main(int argc, char *argv[])
         QString sInfo=(QString("%1 module(s): ").arg(listModules.count()));
         printf("%s\n",sInfo.toLatin1().data());
 
-        QList<XvdgPluginInterface::INFO> listInfos=Xvdg_utils::getPluginInfos(&listModules);
+        QList<XvdgUnpackerPluginInterface::INFO> listInfos=Xvdg_utils::getUnpackerPluginInfos(&listModules);
 
         int nCount=listInfos.count();
 
         for(int i=0;i<nCount;i++)
         {
-            printf("%s\n",Xvdg_utils::infoToString(listInfos.at(i)).toLatin1().data());
+            printf("%s\n",Xvdg_utils::infoUnpackerToString(listInfos.at(i)).toLatin1().data());
         }
     }
 
@@ -155,26 +157,19 @@ int main(int argc, char *argv[])
 
                 for(int j=0;j<nRecordsCount;j++)
                 {
-                    XvdgPluginInterface *pPlugin=Xvdg_utils::getPlugin(&listModules,scanResult.listRecords.at(j));
+                    XvdgUnpackerPluginInterface *pPlugin=Xvdg_utils::getUnpackerPlugin(&listModules,scanResult.listRecords.at(j));
                     if(pPlugin)
                     {
-                        XvdgPluginInterface::INFO info=pPlugin->getInfo();
-                        if(info.bIsUnpacker) // TODO not overlay!
-                        {
-                            printf("Available unpack method: %s\n",pPlugin->getInfo().sName.toLatin1().data());
-                        }
+//                        XvdgUnpackerPluginInterface::INFO info=pPlugin->getInfo();
+                        // TODO not overlay!
+                        printf("Available unpack method: %s\n",pPlugin->getInfo().sName.toLatin1().data());
                     }
                 }
             }
 
             if(pUnpacker)
             {
-                XvdgPluginInterface::INFO info=pUnpacker->getInfo();
-
-                if(info.bIsRunTime)
-                {
-                    pUnpacker->rtUnpack(sFileName);
-                }
+                pUnpacker->rtUnpack(sFileName);
             }
         }
     }

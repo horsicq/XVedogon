@@ -21,14 +21,23 @@
 #include "dialogviewer.h"
 #include "ui_dialogviewer.h"
 
-DialogViewer::DialogViewer(QWidget *parent) :
+DialogViewer::DialogViewer(QObject *pPlugin, QIODevice *pDevice, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogViewer)
 {
     ui->setupUi(this);
-    pWidget=nullptr;
 
     setWindowFlags(windowFlags()|Qt::WindowMinMaxButtonsHint);
+
+    XvdgViewerPluginInterface::DATA _data={};
+
+    _data.pParent=parent;
+    _data.pDevice=pDevice;
+
+    pWidget=((XvdgViewerPluginInterface *)pPlugin)->getWidget(&_data);
+    ui->verticalLayoutPluginWidget->addWidget(pWidget);
+
+    setWindowTitle(Xvdg_utils::infoViewerToString((((XvdgViewerPluginInterface *)pPlugin)->getInfo())));
 }
 
 DialogViewer::~DialogViewer()
@@ -39,12 +48,6 @@ DialogViewer::~DialogViewer()
     }
 
     delete ui;
-}
-
-void DialogViewer::addWidget(QWidget *pWidget)
-{
-    this->pWidget=pWidget;
-    ui->verticalLayoutPluginWidget->addWidget(pWidget);
 }
 
 void DialogViewer::on_pushButtonOK_clicked()

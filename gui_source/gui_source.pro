@@ -4,6 +4,8 @@ CONFIG(debug, debug|release) {
     CONFIG += static_plugins
 }
 
+CONFIG+=gui_build
+
 TARGET = xvdg
 TEMPLATE = app
 
@@ -15,21 +17,27 @@ SOURCES += \
         main_gui.cpp \
         dialogoptions.cpp \
         dialogabout.cpp \
-        dialogmodules.cpp
+        dialogviewers.cpp \
+        dialogunpackers.cpp \
+    dialogunpacker.cpp
 
 HEADERS += \
         dialogviewer.h \
         guimainwindow.h \
         dialogoptions.h \
         dialogabout.h \
-        dialogmodules.h
+        dialogviewers.h \
+        dialogunpackers.h \
+    dialogunpacker.h
 
 FORMS += \
         dialogviewer.ui \
         guimainwindow.ui \
         dialogoptions.ui \
         dialogabout.ui \
-        dialogmodules.ui
+        dialogviewers.ui \
+        dialogunpackers.ui \
+    dialogunpacker.ui
 
 include(../build.pri)
 include(../xvdg_utils.pri)

@@ -29,9 +29,11 @@
 #include "dialogstaticscan.h"
 #include "dialogoptions.h"
 #include "dialogabout.h"
-#include "dialogmodules.h"
+#include "dialogviewers.h"
+#include "dialogunpackers.h"
 #include "dialogviewer.h"
-#include "plugin_interface.h"
+#include "dialogunpacker.h"
+#include "viewer_plugin_interface.h"
 #include "xvdg_utils.h"
 
 namespace Ui {
@@ -64,7 +66,7 @@ private:
     struct BUTTON_INFO
     {
         // TODO RunTime, directory
-        XvdgPluginInterface *pPlugin;
+        QObject *pPlugin;
         BUTTON_INFO_TYPE biType;
         qint64 nOffset;
         qint64 nSize;
@@ -84,10 +86,11 @@ private slots:
     void on_pushButtonClear_clicked();
     void on_pushButtonSave_clicked();
 
-    void on_pushButtonModules_clicked();
+    void on_pushButtonViewers_clicked();
 
     void handleItem(QList<SRECORD> *pListButtons, StaticScanItem *pItem, StaticScanItemModel *pModel, QModelIndex modelIndexParent);
     void pushButtonSlot();
+    void on_pushButtonUnpackers_clicked();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -97,7 +100,8 @@ protected:
 private:
     Ui::GuiMainWindow *ui;
     XVDG::OPTIONS xvdgOptions;
-    QList<QObject *> listPlugins;
+    QList<QObject *> listViewerPlugins;
+    QList<QObject *> listUnpackerPlugins;
     QMap<QString,BUTTON_INFO> mapButtonInfos;
 };
 

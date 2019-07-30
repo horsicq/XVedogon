@@ -104,9 +104,16 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButtonModules">
+       <widget class="QPushButton" name="pushButtonViewers">
         <property name="text">
-         <string>Modules</string>
+         <string>Viewers</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButtonUnpackers">
+        <property name="text">
+         <string>Unpackers</string>
         </property>
        </widget>
       </item>

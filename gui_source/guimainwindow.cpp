@@ -118,48 +118,49 @@ void GuiMainWindow::_scan(QString sFileName)
         {
             // TODO move to utils
             SpecAbstract::SCAN_STRUCT ss=listSrecords.at(i).scanStruct;
-            XvdgPluginInterface *pPluginInterface=Xvdg_utils::getPlugin(&listPlugins,ss);
 
-            if(pPluginInterface)
+            XvdgUnpackerPluginInterface *pUnpackerPluginInterface=Xvdg_utils::getUnpackerPlugin(&listUnpackerPlugins,ss);
+
+            if(pUnpackerPluginInterface)
             {
-                XvdgPluginInterface::INFO info=pPluginInterface->getInfo();
+                BUTTON_INFO bi={};
+                QString sGUID=QUuid::createUuid().toString();
+                bi.pPlugin=(QObject *)pUnpackerPluginInterface;
+                bi.biType=BUTTON_INFO_TYPE_RTUNPACK;
+                bi.nOffset=ss.nOffset;
+                bi.nSize=ss.nSize;
 
-                if(info.bIsUnpacker)
-                {
-                    BUTTON_INFO bi={};
-                    QString sGUID=QUuid::createUuid().toString();
-                    bi.pPlugin=pPluginInterface;
-                    bi.biType=BUTTON_INFO_TYPE_RTUNPACK;
-                    bi.nOffset=ss.nOffset;
-                    bi.nSize=ss.nSize;
+                mapButtonInfos.insert(sGUID,bi);
 
-                    mapButtonInfos.insert(sGUID,bi);
+                QPushButton *pPushButton=new QPushButton(tr("Unpack"),this);
+                pPushButton->setProperty("uid",sGUID);
 
-                    QPushButton *pPushButton=new QPushButton(tr("Unpack"));
-                    pPushButton->setProperty("uid",sGUID);
+                connect(pPushButton,SIGNAL(clicked(bool)),this,SLOT(pushButtonSlot()));
 
-                    connect(pPushButton,SIGNAL(clicked(bool)),this,SLOT(pushButtonSlot()));
+                ui->treeViewResult->setIndexWidget(listSrecords.at(i).modelIndex1,pPushButton);
+            }
 
-                    ui->treeViewResult->setIndexWidget(listSrecords.at(i).modelIndex1,pPushButton);
-                }
-                if(info.bIsViewer)
-                {
-                    BUTTON_INFO bi={};
-                    QString sGUID=QUuid::createUuid().toString();
-                    bi.pPlugin=pPluginInterface;
-                    bi.biType=BUTTON_INFO_TYPE_VIEWER;
-                    bi.nOffset=ss.nOffset;
-                    bi.nSize=ss.nSize;
+            XvdgViewerPluginInterface *pViewerPluginInterface=Xvdg_utils::getViewerPlugin(&listViewerPlugins,ss);
 
-                    mapButtonInfos.insert(sGUID,bi);
+            if(pViewerPluginInterface)
+            {
+//                XvdgViewerPluginInterface::INFO info=pPluginInterface->getInfo();
 
-                    QPushButton *pPushButton=new QPushButton(tr("Info"));
-                    pPushButton->setProperty("uid",sGUID);
+                BUTTON_INFO bi={};
+                QString sGUID=QUuid::createUuid().toString();
+                bi.pPlugin=(QObject *)pViewerPluginInterface;
+                bi.biType=BUTTON_INFO_TYPE_VIEWER;
+                bi.nOffset=ss.nOffset;
+                bi.nSize=ss.nSize;
 
-                    connect(pPushButton,SIGNAL(clicked(bool)),this,SLOT(pushButtonSlot()));
+                mapButtonInfos.insert(sGUID,bi);
 
-                    ui->treeViewResult->setIndexWidget(listSrecords.at(i).modelIndex2,pPushButton);
-                }
+                QPushButton *pPushButton=new QPushButton(tr("Info"));
+                pPushButton->setProperty("uid",sGUID);
+
+                connect(pPushButton,SIGNAL(clicked(bool)),this,SLOT(pushButtonSlot()));
+
+                ui->treeViewResult->setIndexWidget(listSrecords.at(i).modelIndex2,pPushButton);
             }
         }
 
@@ -235,10 +236,14 @@ void GuiMainWindow::on_pushButtonOptions_clicked()
 
 void GuiMainWindow::loadPlugins()
 {
-    listPlugins=Xvdg_utils::getPluginList(this);
+    listViewerPlugins=Xvdg_utils::getViewerPluginList(this);
+    listUnpackerPlugins=Xvdg_utils::getUnpackerPluginList(this);
 
-    ui->pushButtonModules->setEnabled(listPlugins.count());
-    ui->pushButtonModules->setText(tr("%1: %2").arg(tr("Modules")).arg(listPlugins.count()));
+    ui->pushButtonViewers->setEnabled(listViewerPlugins.count());
+    ui->pushButtonViewers->setText(tr("%1: %2").arg(tr("Viewers")).arg(listViewerPlugins.count()));
+
+    ui->pushButtonUnpackers->setEnabled(listUnpackerPlugins.count());
+    ui->pushButtonUnpackers->setText(tr("%1: %2").arg(tr("Unpackers")).arg(listUnpackerPlugins.count()));
 }
 
 void GuiMainWindow::on_pushButtonAbout_clicked()
@@ -260,10 +265,10 @@ void GuiMainWindow::on_pushButtonSave_clicked()
     DialogStaticScan::saveResult(this,(StaticScanItemModel *)pModel,sSaveFileNameDirectory);
 }
 
-void GuiMainWindow::on_pushButtonModules_clicked()
+void GuiMainWindow::on_pushButtonViewers_clicked()
 {
-    DialogModules dialogModules(this,&listPlugins);
-    dialogModules.exec();
+    DialogViewers dialogViewers(this,&listViewerPlugins);
+    dialogViewers.exec();
 }
 
 void GuiMainWindow::handleItem(QList<SRECORD> *pListButtons, StaticScanItem *pItem, StaticScanItemModel *pModel, QModelIndex modelIndexParent)
@@ -302,26 +307,15 @@ void GuiMainWindow::pushButtonSlot()
             QFile file;
             file.setFileName(ui->lineEditFileName->text());
 
-            if(XBinary::tryToOpen(&file)) // TODO readOnly
+            if(XBinary::tryToOpen(&file))
             {
                 SubDevice sd(&file,bi.nOffset,bi.nSize);
 
                 sd.open(file.openMode());
 
-                XvdgPluginInterface::DATA data={};
-                data.pParent=this;
-                data.pDevice=&sd;
+                DialogViewer dv(bi.pPlugin,&sd,this);
 
-                QWidget *pWidget=bi.pPlugin->getViewerWidget(&data);
-
-                if(pWidget)
-                {
-                    DialogViewer dv(this);
-
-                    dv.addWidget(pWidget);
-
-                    dv.exec();
-                }
+                dv.exec();
 
                 sd.close();
                 file.close();
@@ -329,7 +323,15 @@ void GuiMainWindow::pushButtonSlot()
         }
         else if(bi.biType==BUTTON_INFO_TYPE_RTUNPACK)
         {
-            bi.pPlugin->rtUnpack(ui->lineEditFileName->text());
+            DialogUnpacker du(bi.pPlugin,ui->lineEditFileName->text(),this);
+
+            du.exec();
         }
     }
+}
+
+void GuiMainWindow::on_pushButtonUnpackers_clicked()
+{
+    DialogUnpackers dialogUnpackers(this,&listUnpackerPlugins);
+    dialogUnpackers.exec();
 }

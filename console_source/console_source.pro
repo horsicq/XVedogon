@@ -1,9 +1,9 @@
 QT += core
 QT -= gui
 
-#CONFIG(debug, debug|release) {
-#    CONFIG += static_plugins
-#}
+CONFIG(debug, debug|release) {
+    CONFIG += static_plugins
+}
 
 CONFIG += c++11
 
