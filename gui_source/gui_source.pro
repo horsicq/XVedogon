@@ -19,7 +19,9 @@ SOURCES += \
         dialogabout.cpp \
         dialogviewers.cpp \
         dialogunpackers.cpp \
-    dialogunpacker.cpp
+    dialogunpacker.cpp \
+    unpackerthread.cpp \
+    dialogunpackerprocess.cpp
 
 HEADERS += \
         dialogviewer.h \
@@ -28,7 +30,9 @@ HEADERS += \
         dialogabout.h \
         dialogviewers.h \
         dialogunpackers.h \
-    dialogunpacker.h
+    dialogunpacker.h \
+    unpackerthread.h \
+    dialogunpackerprocess.h
 
 FORMS += \
         dialogviewer.ui \
@@ -37,7 +41,8 @@ FORMS += \
         dialogabout.ui \
         dialogviewers.ui \
         dialogunpackers.ui \
-    dialogunpacker.ui
+    dialogunpacker.ui \
+    dialogunpackerprocess.ui
 
 include(../build.pri)
 include(../xvdg_utils.pri)

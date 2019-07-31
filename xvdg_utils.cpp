@@ -20,21 +20,133 @@
 //
 #include "xvdg_utils.h"
 
-QList<QObject *> Xvdg_utils::getPluginList(QObject *pParent)
+#ifdef QT_GUI_LIB
+QList<QObject *> Xvdg_utils::getViewerPluginList(QObject *pParent)
 {
     QList<QObject *> listResult;
 
 #ifdef STATIC_PLUGINS
-    listResult.append(new Plugin_Binary(pParent));
-    listResult.append(new Plugin_Zip(pParent));
-    listResult.append(new Plugin_PE(pParent));
-    listResult.append(new Plugin_ELF(pParent));
-    listResult.append(new Plugin_MSDOS(pParent));
-    listResult.append(new Plugin_MACH(pParent));
-    listResult.append(new Plugin_UPX(pParent));
+    listResult.append(new Viewer_Binary(pParent));
+    listResult.append(new Viewer_PE(pParent));
+    listResult.append(new Viewer_ELF(pParent));
+    listResult.append(new Viewer_MSDOS(pParent));
+    listResult.append(new Viewer_MACH(pParent));
 #else
-//    QString sPluginPath=QCoreApplication::applicationDirPath()+QDir::separator()+"modules";
-    QString sPluginPath="C:\\tmp_build\\qt5\\xvdg_source\\xvdg_plugins\\build\\debug";
+    QString sPluginPath=QCoreApplication::applicationDirPath()+QDir::separator()+"viewers";
+
+    QDirIterator it(sPluginPath,QStringList() << "*.*",QDir::Files,QDirIterator::NoIteratorFlags);
+    while(it.hasNext())
+    {
+        QPluginLoader *pPluginLoader=new QPluginLoader(pParent);
+        pPluginLoader->setFileName(it.next());
+        bool bLoaded=false;
+        if(pPluginLoader->load())
+        {
+            QObject *pPlugin=pPluginLoader->instance();
+            if(pPlugin)
+            {
+                listResult.append(pPlugin);
+                bLoaded=true;
+            }
+        }
+        if(!bLoaded)
+        {
+            delete pPluginLoader;
+        }
+    }
+#endif
+
+    return listResult;
+}
+#endif
+#ifdef QT_GUI_LIB
+XvdgViewerPluginInterface *Xvdg_utils::getViewerPlugin(QList<QObject *> *pListPlugins,SpecAbstract::SCAN_STRUCT ss)
+{
+    TODO
+
+    XvdgViewerPluginInterface *pResult=nullptr;
+
+    int nPluginsCount=pListPlugins->count();
+
+    for(int i=0;i<nPluginsCount;i++)
+    {
+        XvdgViewerPluginInterface *pPluginInterface=qobject_cast<XvdgViewerPluginInterface *>(pListPlugins->at(i));
+
+        if(pPluginInterface)
+        {
+            if(pPluginInterface->isValid(&ss))
+            {
+                pResult=pPluginInterface;
+                break;
+            }
+        }
+    }
+
+    return pResult;
+}
+#endif
+#ifdef QT_GUI_LIB
+QList<XvdgViewerPluginInterface::INFO> Xvdg_utils::getViewerPluginInfos(QList<QObject *> *pListPlugins)
+{
+    QList<XvdgViewerPluginInterface::INFO> listResult;
+
+    int nCount=pListPlugins->count();
+
+    for(int i=0;i<nCount;i++)
+    {
+        XvdgViewerPluginInterface *pPluginInterface=qobject_cast<XvdgViewerPluginInterface *>(pListPlugins->at(i));
+        if(pPluginInterface)
+        {
+            XvdgViewerPluginInterface::INFO info=pPluginInterface->getInfo();
+
+            listResult.append(info);
+        }
+    }
+
+    return listResult;
+}
+#endif
+#ifdef QT_GUI_LIB
+QString Xvdg_utils::infoViewerToString(XvdgViewerPluginInterface::INFO info)
+{
+    QString sResult;
+
+    sResult=QString("%1 - (%2) [%3]").arg(info.sName).arg(info.sVersion).arg(info.sDescription);
+
+    return sResult;
+}
+#endif
+#ifdef QT_GUI_LIB
+XvdgViewerPluginInterface *Xvdg_utils::getViewerPluginByName(QList<QObject *> *pListPlugins, QString sName)
+{
+    XvdgViewerPluginInterface *pResult=nullptr;
+
+    int nCount=pListPlugins->count();
+
+    for(int i=0;i<nCount;i++)
+    {
+        XvdgViewerPluginInterface *pPluginInterface=qobject_cast<XvdgViewerPluginInterface *>(pListPlugins->at(i));
+        if(pPluginInterface)
+        {
+            if(pPluginInterface->getInfo().sName==sName)
+            {
+                pResult=pPluginInterface;
+                break;
+            }
+        }
+    }
+
+    return pResult;
+}
+#endif
+QList<QObject *> Xvdg_utils::getUnpackerPluginList(QObject *pParent)
+{
+    QList<QObject *> listResult;
+
+#ifdef STATIC_PLUGINS
+    listResult.append(new Unpacker_UPX(pParent));
+#else
+    QString sPluginPath=QCoreApplication::applicationDirPath()+QDir::separator()+"unpackers";
 
     QDirIterator it(sPluginPath,QStringList() << "*.*",QDir::Files,QDirIterator::NoIteratorFlags);
     while(it.hasNext())
@@ -61,15 +173,15 @@ QList<QObject *> Xvdg_utils::getPluginList(QObject *pParent)
     return listResult;
 }
 
-XvdgPluginInterface *Xvdg_utils::getPlugin(QList<QObject *> *pListPlugins,SpecAbstract::SCAN_STRUCT ss)
+XvdgUnpackerPluginInterface *Xvdg_utils::getUnpackerPlugin(QList<QObject *> *pListPlugins, SpecAbstract::SCAN_STRUCT ss)
 {
-    XvdgPluginInterface *pResult=nullptr;
+    XvdgUnpackerPluginInterface *pResult=nullptr;
 
     int nPluginsCount=pListPlugins->count();
 
     for(int i=0;i<nPluginsCount;i++)
     {
-        XvdgPluginInterface *pPluginInterface=qobject_cast<XvdgPluginInterface *>(pListPlugins->at(i));
+        XvdgUnpackerPluginInterface *pPluginInterface=qobject_cast<XvdgUnpackerPluginInterface *>(pListPlugins->at(i));
         if(pPluginInterface)
         {
             if(pPluginInterface->isValid(&ss))
@@ -83,18 +195,18 @@ XvdgPluginInterface *Xvdg_utils::getPlugin(QList<QObject *> *pListPlugins,SpecAb
     return pResult;
 }
 
-QList<XvdgPluginInterface::INFO> Xvdg_utils::getPluginInfos(QList<QObject *> *pListPlugins)
+QList<XvdgUnpackerPluginInterface::INFO> Xvdg_utils::getUnpackerPluginInfos(QList<QObject *> *pListPlugins)
 {
-    QList<XvdgPluginInterface::INFO> listResult;
+    QList<XvdgUnpackerPluginInterface::INFO> listResult;
 
     int nCount=pListPlugins->count();
 
     for(int i=0;i<nCount;i++)
     {
-        XvdgPluginInterface *pPluginInterface=qobject_cast<XvdgPluginInterface *>(pListPlugins->at(i));
+        XvdgUnpackerPluginInterface *pPluginInterface=qobject_cast<XvdgUnpackerPluginInterface *>(pListPlugins->at(i));
         if(pPluginInterface)
         {
-            XvdgPluginInterface::INFO info=pPluginInterface->getInfo();
+            XvdgUnpackerPluginInterface::INFO info=pPluginInterface->getInfo();
 
             listResult.append(info);
         }
@@ -103,7 +215,7 @@ QList<XvdgPluginInterface::INFO> Xvdg_utils::getPluginInfos(QList<QObject *> *pL
     return listResult;
 }
 
-QString Xvdg_utils::infoToString(XvdgPluginInterface::INFO info)
+QString Xvdg_utils::infoUnpackerToString(XvdgUnpackerPluginInterface::INFO info)
 {
     QString sResult;
 
@@ -112,15 +224,15 @@ QString Xvdg_utils::infoToString(XvdgPluginInterface::INFO info)
     return sResult;
 }
 
-XvdgPluginInterface *Xvdg_utils::getPluginByName(QList<QObject *> *pListPlugins, QString sName)
+XvdgUnpackerPluginInterface *Xvdg_utils::getUnpackerPluginByName(QList<QObject *> *pListPlugins, QString sName)
 {
-    XvdgPluginInterface *pResult=nullptr;
+    XvdgUnpackerPluginInterface *pResult=nullptr;
 
     int nCount=pListPlugins->count();
 
     for(int i=0;i<nCount;i++)
     {
-        XvdgPluginInterface *pPluginInterface=qobject_cast<XvdgPluginInterface *>(pListPlugins->at(i));
+        XvdgUnpackerPluginInterface *pPluginInterface=qobject_cast<XvdgUnpackerPluginInterface *>(pListPlugins->at(i));
         if(pPluginInterface)
         {
             if(pPluginInterface->getInfo().sName==sName)
