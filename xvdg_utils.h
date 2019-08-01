@@ -23,15 +23,19 @@
 
 #include <QObject>
 #include <QCoreApplication>
-#include "plugin_interface.h"
+#ifdef QT_GUI_LIB
+#include "viewer_plugin_interface.h"
+#endif
+#include "unpacker_plugin_interface.h"
 #ifdef STATIC_PLUGINS
-#include "plugin_binary.h"
-#include "plugin_zip.h"
-#include "plugin_pe.h"
-#include "plugin_elf.h"
-#include "plugin_msdos.h"
-#include "plugin_mach.h"
-#include "plugin_upx.h"
+#ifdef QT_GUI_LIB
+#include "viewer_binary.h"
+#include "viewer_pe.h"
+#include "viewer_elf.h"
+#include "viewer_msdos.h"
+#include "viewer_mach.h"
+#endif
+#include "unpacker_upx.h"
 #else
 #include <QPluginLoader>
 #include <QDirIterator>
@@ -41,11 +45,23 @@
 class Xvdg_utils
 {
 public:
-    static QList<QObject *> getPluginList(QObject *pParent);
-    static XvdgPluginInterface *getPlugin(QList<QObject *> *pListPlugins,SpecAbstract::SCAN_STRUCT ss);
-    static QList<XvdgPluginInterface::INFO> getPluginInfos(QList<QObject *> *pListPlugins);
-    static QString infoToString(XvdgPluginInterface::INFO info);
-    static XvdgPluginInterface *getPluginByName(QList<QObject *> *pListPlugins,QString sName);
+#ifdef QT_GUI_LIB
+    static QList<QObject *> getViewerPluginList(QObject *pParent);
+    static QObject *getViewerPlugin(QList<QObject *> *pListPlugins,SpecAbstract::SCAN_STRUCT ss);
+    static QList<XvdgViewerPluginInterface::INFO> getViewerPluginInfos(QList<QObject *> *pListPlugins);
+    static XvdgViewerPluginInterface::INFO getViewerPluginInfo(QObject *pPlugin);
+    static QString infoViewerToString(XvdgViewerPluginInterface::INFO info);
+    static XvdgViewerPluginInterface *getViewerPluginByName(QList<QObject *> *pListPlugins,QString sName);
+    static QWidget *getViewerPluginWidget(QObject *pPlugin, XvdgViewerPluginInterface::DATA *pData);
+#endif
+    static QList<QObject *> getUnpackerPluginList(QObject *pParent);
+    static QObject *getUnpackerPlugin(QList<QObject *> *pListPlugins,SpecAbstract::SCAN_STRUCT ss);
+    static QList<XvdgUnpackerPluginInterface::INFO> getUnpackerPluginInfos(QList<QObject *> *pListPlugins);
+    static XvdgUnpackerPluginInterface::INFO getUnpackerPluginInfo(QObject *pPlugin);
+    static QString infoUnpackerToString(XvdgUnpackerPluginInterface::INFO info);
+    static XvdgUnpackerPluginInterface *getUnpackerPluginByName(QList<QObject *> *pListPlugins,QString sName);
+    static bool rtUnpack(QObject *pPlugin,QString sFileName);
+    static void rtStop(QObject *pPlugin);
 };
 
 #endif // XVDG_UTILS_H

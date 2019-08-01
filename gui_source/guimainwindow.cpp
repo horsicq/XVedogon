@@ -119,13 +119,13 @@ void GuiMainWindow::_scan(QString sFileName)
             // TODO move to utils
             SpecAbstract::SCAN_STRUCT ss=listSrecords.at(i).scanStruct;
 
-            XvdgUnpackerPluginInterface *pUnpackerPluginInterface=Xvdg_utils::getUnpackerPlugin(&listUnpackerPlugins,ss);
+            QObject *pUnpackerPlugin=Xvdg_utils::getUnpackerPlugin(&listUnpackerPlugins,ss);
 
-            if(pUnpackerPluginInterface)
+            if(pUnpackerPlugin)
             {
                 BUTTON_INFO bi={};
                 QString sGUID=QUuid::createUuid().toString();
-                bi.pPlugin=(QObject *)pUnpackerPluginInterface;
+                bi.pPlugin=pUnpackerPlugin;
                 bi.biType=BUTTON_INFO_TYPE_RTUNPACK;
                 bi.nOffset=ss.nOffset;
                 bi.nSize=ss.nSize;
@@ -140,15 +140,15 @@ void GuiMainWindow::_scan(QString sFileName)
                 ui->treeViewResult->setIndexWidget(listSrecords.at(i).modelIndex1,pPushButton);
             }
 
-            XvdgViewerPluginInterface *pViewerPluginInterface=Xvdg_utils::getViewerPlugin(&listViewerPlugins,ss);
+            QObject *pViewerPlugin=Xvdg_utils::getViewerPlugin(&listViewerPlugins,ss);
 
-            if(pViewerPluginInterface)
+            if(pViewerPlugin)
             {
 //                XvdgViewerPluginInterface::INFO info=pPluginInterface->getInfo();
 
                 BUTTON_INFO bi={};
                 QString sGUID=QUuid::createUuid().toString();
-                bi.pPlugin=(QObject *)pViewerPluginInterface;
+                bi.pPlugin=pViewerPlugin;
                 bi.biType=BUTTON_INFO_TYPE_VIEWER;
                 bi.nOffset=ss.nOffset;
                 bi.nSize=ss.nSize;

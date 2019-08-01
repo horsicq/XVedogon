@@ -30,7 +30,7 @@ DialogUnpacker::DialogUnpacker(QObject *pPlugin, QString sFileName, QWidget *par
     this->pPlugin=pPlugin;
     this->sFileName=sFileName;
 
-    setWindowTitle(Xvdg_utils::infoUnpackerToString((((XvdgUnpackerPluginInterface *)pPlugin)->getInfo())));
+    setWindowTitle(Xvdg_utils::infoUnpackerToString(Xvdg_utils::getUnpackerPluginInfo(pPlugin)));
 
     ui->lineEditResultFileName->setText(XBinary::getUnpackedName(sFileName));
 }

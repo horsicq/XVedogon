@@ -34,10 +34,10 @@ DialogViewer::DialogViewer(QObject *pPlugin, QIODevice *pDevice, QWidget *parent
     _data.pParent=parent;
     _data.pDevice=pDevice;
 
-    pWidget=((XvdgViewerPluginInterface *)pPlugin)->getWidget(&_data);
+    pWidget=Xvdg_utils::getViewerPluginWidget(pPlugin,&_data);
     ui->verticalLayoutPluginWidget->addWidget(pWidget);
 
-    setWindowTitle(Xvdg_utils::infoViewerToString((((XvdgViewerPluginInterface *)pPlugin)->getInfo())));
+    setWindowTitle(Xvdg_utils::infoViewerToString(Xvdg_utils::getViewerPluginInfo(pPlugin)));
 }
 
 DialogViewer::~DialogViewer()

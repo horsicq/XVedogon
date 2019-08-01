@@ -60,11 +60,10 @@ QList<QObject *> Xvdg_utils::getViewerPluginList(QObject *pParent)
 }
 #endif
 #ifdef QT_GUI_LIB
-XvdgViewerPluginInterface *Xvdg_utils::getViewerPlugin(QList<QObject *> *pListPlugins,SpecAbstract::SCAN_STRUCT ss)
+QObject *Xvdg_utils::getViewerPlugin(QList<QObject *> *pListPlugins,SpecAbstract::SCAN_STRUCT ss)
 {
-    TODO
 
-    XvdgViewerPluginInterface *pResult=nullptr;
+    QObject *pResult=nullptr;
 
     int nPluginsCount=pListPlugins->count();
 
@@ -76,7 +75,7 @@ XvdgViewerPluginInterface *Xvdg_utils::getViewerPlugin(QList<QObject *> *pListPl
         {
             if(pPluginInterface->isValid(&ss))
             {
-                pResult=pPluginInterface;
+                pResult=pListPlugins->at(i);
                 break;
             }
         }
@@ -107,6 +106,21 @@ QList<XvdgViewerPluginInterface::INFO> Xvdg_utils::getViewerPluginInfos(QList<QO
 }
 #endif
 #ifdef QT_GUI_LIB
+XvdgViewerPluginInterface::INFO Xvdg_utils::getViewerPluginInfo(QObject *pPlugin)
+{
+    XvdgViewerPluginInterface::INFO result={};
+
+    XvdgViewerPluginInterface *pPluginInterface=qobject_cast<XvdgViewerPluginInterface *>(pPlugin);
+
+    if(pPluginInterface)
+    {
+        result=pPluginInterface->getInfo();
+    }
+
+    return result;
+}
+#endif
+#ifdef QT_GUI_LIB
 QString Xvdg_utils::infoViewerToString(XvdgViewerPluginInterface::INFO info)
 {
     QString sResult;
@@ -134,6 +148,21 @@ XvdgViewerPluginInterface *Xvdg_utils::getViewerPluginByName(QList<QObject *> *p
                 break;
             }
         }
+    }
+
+    return pResult;
+}
+#endif
+#ifdef QT_GUI_LIB
+QWidget *Xvdg_utils::getViewerPluginWidget(QObject *pPlugin, XvdgViewerPluginInterface::DATA *pData)
+{
+    QWidget *pResult=0;
+
+    XvdgViewerPluginInterface *pPluginInterface=qobject_cast<XvdgViewerPluginInterface *>(pPlugin);
+
+    if(pPluginInterface)
+    {
+        pResult=pPluginInterface->getWidget(pData);
     }
 
     return pResult;
@@ -173,9 +202,9 @@ QList<QObject *> Xvdg_utils::getUnpackerPluginList(QObject *pParent)
     return listResult;
 }
 
-XvdgUnpackerPluginInterface *Xvdg_utils::getUnpackerPlugin(QList<QObject *> *pListPlugins, SpecAbstract::SCAN_STRUCT ss)
+QObject *Xvdg_utils::getUnpackerPlugin(QList<QObject *> *pListPlugins, SpecAbstract::SCAN_STRUCT ss)
 {
-    XvdgUnpackerPluginInterface *pResult=nullptr;
+    QObject *pResult=nullptr;
 
     int nPluginsCount=pListPlugins->count();
 
@@ -186,7 +215,7 @@ XvdgUnpackerPluginInterface *Xvdg_utils::getUnpackerPlugin(QList<QObject *> *pLi
         {
             if(pPluginInterface->isValid(&ss))
             {
-                pResult=pPluginInterface;
+                pResult=pListPlugins->at(i);
                 break;
             }
         }
@@ -213,6 +242,20 @@ QList<XvdgUnpackerPluginInterface::INFO> Xvdg_utils::getUnpackerPluginInfos(QLis
     }
 
     return listResult;
+}
+
+XvdgUnpackerPluginInterface::INFO Xvdg_utils::getUnpackerPluginInfo(QObject *pPlugin)
+{
+    XvdgUnpackerPluginInterface::INFO result={};
+
+    XvdgUnpackerPluginInterface *pPluginInterface=qobject_cast<XvdgUnpackerPluginInterface *>(pPlugin);
+
+    if(pPluginInterface)
+    {
+        result=pPluginInterface->getInfo();
+    }
+
+    return result;
 }
 
 QString Xvdg_utils::infoUnpackerToString(XvdgUnpackerPluginInterface::INFO info)
@@ -244,4 +287,28 @@ XvdgUnpackerPluginInterface *Xvdg_utils::getUnpackerPluginByName(QList<QObject *
     }
 
     return pResult;
+}
+
+bool Xvdg_utils::rtUnpack(QObject *pPlugin, QString sFileName)
+{
+    bool bResult=false;
+
+    XvdgUnpackerPluginInterface *pPluginInterface=qobject_cast<XvdgUnpackerPluginInterface *>(pPlugin);
+
+    if(pPluginInterface)
+    {
+        bResult=pPluginInterface->rtUnpack(sFileName);
+    }
+
+    return bResult;
+}
+
+void Xvdg_utils::rtStop(QObject *pPlugin)
+{
+    XvdgUnpackerPluginInterface *pPluginInterface=qobject_cast<XvdgUnpackerPluginInterface *>(pPlugin);
+
+    if(pPluginInterface)
+    {
+        pPluginInterface->rtStop();
+    }
 }
