@@ -267,9 +267,9 @@ QString Xvdg_utils::infoUnpackerToString(XvdgUnpackerPluginInterface::INFO info)
     return sResult;
 }
 
-XvdgUnpackerPluginInterface *Xvdg_utils::getUnpackerPluginByName(QList<QObject *> *pListPlugins, QString sName)
+QObject *Xvdg_utils::getUnpackerPluginByName(QList<QObject *> *pListPlugins, QString sName)
 {
-    XvdgUnpackerPluginInterface *pResult=nullptr;
+    QObject *pResult=nullptr;
 
     int nCount=pListPlugins->count();
 
@@ -280,7 +280,7 @@ XvdgUnpackerPluginInterface *Xvdg_utils::getUnpackerPluginByName(QList<QObject *
         {
             if(pPluginInterface->getInfo().sName==sName)
             {
-                pResult=pPluginInterface;
+                pResult=pListPlugins->at(i);
                 break;
             }
         }
@@ -289,7 +289,7 @@ XvdgUnpackerPluginInterface *Xvdg_utils::getUnpackerPluginByName(QList<QObject *
     return pResult;
 }
 
-bool Xvdg_utils::rtUnpack(QObject *pPlugin, QString sFileName)
+bool Xvdg_utils::rtUnpack(QObject *pPlugin, QString sFileName,QString sResultFileName)
 {
     bool bResult=false;
 
@@ -297,7 +297,7 @@ bool Xvdg_utils::rtUnpack(QObject *pPlugin, QString sFileName)
 
     if(pPluginInterface)
     {
-        bResult=pPluginInterface->rtUnpack(sFileName);
+        bResult=pPluginInterface->rtUnpack(sFileName,sResultFileName);
     }
 
     return bResult;

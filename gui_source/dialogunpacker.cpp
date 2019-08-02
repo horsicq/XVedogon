@@ -49,7 +49,9 @@ void DialogUnpacker::on_pushButtonUnpack_clicked()
 {
     DialogUnpackerProcess dup(this);
 
-    dup.setData(pPlugin,sFileName);
+    QString sResultFileName=ui->lineEditResultFileName->text();
+
+    dup.setData(pPlugin,sFileName,sResultFileName);
 
     dup.exec();
 }

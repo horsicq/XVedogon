@@ -59,8 +59,8 @@ public:
     static QList<XvdgUnpackerPluginInterface::INFO> getUnpackerPluginInfos(QList<QObject *> *pListPlugins);
     static XvdgUnpackerPluginInterface::INFO getUnpackerPluginInfo(QObject *pPlugin);
     static QString infoUnpackerToString(XvdgUnpackerPluginInterface::INFO info);
-    static XvdgUnpackerPluginInterface *getUnpackerPluginByName(QList<QObject *> *pListPlugins,QString sName);
-    static bool rtUnpack(QObject *pPlugin,QString sFileName);
+    static QObject *getUnpackerPluginByName(QList<QObject *> *pListPlugins,QString sName);
+    static bool rtUnpack(QObject *pPlugin, QString sFileName, QString sResultFileName);
     static void rtStop(QObject *pPlugin);
 };
 

@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
     QCommandLineOption clDeepScan(QStringList()<<"d"<<"deepscan","Deep scan.");
     QCommandLineOption clResultAsXml(QStringList()<<"x"<<"xml","Scan result as XML.");
     QCommandLineOption clUnpack(QStringList()<<"U"<<"unpack","Unpack <method>.","method");
+    QCommandLineOption clResult(QStringList()<<"R"<<"result","Result file name.");
 
     // TODO options for specific unpacker: -O OPTION:VALUE
 
@@ -64,13 +65,15 @@ int main(int argc, char *argv[])
     parser.addOption(clDeepScan);
     parser.addOption(clResultAsXml);
     parser.addOption(clUnpack);
+    parser.addOption(clResult);
     parser.addHelpOption();
     parser.addVersionOption();
 
     parser.process(app);
 
     bool bIsUsed=false;
-    XvdgUnpackerPluginInterface *pUnpacker=nullptr;
+    QObject *pUnpacker=nullptr;
+    QString sResultFileName;
 
     if(parser.isSet(clUnpack))
     {
@@ -82,6 +85,11 @@ int main(int argc, char *argv[])
         {
             co.infoMessage(QString("Cannot find unpack module: %1").arg(sUnpackMethod),0);
         }
+    }
+
+    if(parser.isSet(clResult))
+    {
+        QString sResultFileName=parser.value(clResult);
     }
 
     if(parser.isSet(clModules))
@@ -157,19 +165,24 @@ int main(int argc, char *argv[])
 
                 for(int j=0;j<nRecordsCount;j++)
                 {
-                    XvdgUnpackerPluginInterface *pPlugin=Xvdg_utils::getUnpackerPlugin(&listModules,scanResult.listRecords.at(j));
+                    QObject *pPlugin=Xvdg_utils::getUnpackerPlugin(&listModules,scanResult.listRecords.at(j));
                     if(pPlugin)
                     {
 //                        XvdgUnpackerPluginInterface::INFO info=pPlugin->getInfo();
                         // TODO not overlay!
-                        printf("Available unpack method: %s\n",pPlugin->getInfo().sName.toLatin1().data());
+                        printf("Available unpack method: %s\n",Xvdg_utils::getUnpackerPluginInfo(pPlugin).sName.toLatin1().data());
                     }
                 }
             }
 
             if(pUnpacker)
             {
-                pUnpacker->rtUnpack(sFileName);
+                if(sResultFileName=="")
+                {
+                    sResultFileName=XBinary::getUnpackedName(sFileName);
+                }
+
+                Xvdg_utils::rtUnpack(pUnpacker,sFileName,sResultFileName);
             }
         }
     }
