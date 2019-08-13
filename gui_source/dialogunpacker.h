@@ -45,6 +45,7 @@ private:
     Ui::DialogUnpacker *ui;
     QObject *pPlugin;
     QString sFileName;
+    QList<XvdgUnpackerPluginInterface::OPTIONS_RECORD> listOptions;
 };
 
 #endif // DIALOGUNPACKER_H

@@ -289,7 +289,21 @@ QObject *Xvdg_utils::getUnpackerPluginByName(QList<QObject *> *pListPlugins, QSt
     return pResult;
 }
 
-bool Xvdg_utils::rtUnpack(QObject *pPlugin, QString sFileName,QString sResultFileName)
+QList<XvdgUnpackerPluginInterface::OPTIONS_RECORD> Xvdg_utils::getDefaultOptions(QObject *pPlugin)
+{
+    QList<XvdgUnpackerPluginInterface::OPTIONS_RECORD> listResult;
+
+    XvdgUnpackerPluginInterface *pPluginInterface=qobject_cast<XvdgUnpackerPluginInterface *>(pPlugin);
+
+    if(pPluginInterface)
+    {
+        listResult=pPluginInterface->getDefaultOptions();
+    }
+
+    return listResult;
+}
+
+bool Xvdg_utils::rtUnpack(QObject *pPlugin, QString sFileName, QString sResultFileName, QList<XvdgUnpackerPluginInterface::OPTIONS_RECORD> *pListOptions)
 {
     bool bResult=false;
 
@@ -297,7 +311,7 @@ bool Xvdg_utils::rtUnpack(QObject *pPlugin, QString sFileName,QString sResultFil
 
     if(pPluginInterface)
     {
-        bResult=pPluginInterface->rtUnpack(sFileName,sResultFileName);
+        bResult=pPluginInterface->rtUnpack(sFileName,sResultFileName,pListOptions);
     }
 
     return bResult;

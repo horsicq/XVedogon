@@ -30,6 +30,8 @@ DialogUnpacker::DialogUnpacker(QObject *pPlugin, QString sFileName, QWidget *par
     this->pPlugin=pPlugin;
     this->sFileName=sFileName;
 
+    listOptions=Xvdg_utils::getDefaultOptions(pPlugin);
+
     setWindowTitle(Xvdg_utils::infoUnpackerToString(Xvdg_utils::getUnpackerPluginInfo(pPlugin)));
 
     ui->lineEditResultFileName->setText(XBinary::getUnpackedName(sFileName));
@@ -51,7 +53,7 @@ void DialogUnpacker::on_pushButtonUnpack_clicked()
 
     QString sResultFileName=ui->lineEditResultFileName->text();
 
-    dup.setData(pPlugin,sFileName,sResultFileName);
+    dup.setData(pPlugin,sFileName,sResultFileName,&listOptions);
 
     dup.exec();
 }

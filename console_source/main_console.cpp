@@ -182,7 +182,9 @@ int main(int argc, char *argv[])
                     sResultFileName=XBinary::getUnpackedName(sFileName);
                 }
 
-                Xvdg_utils::rtUnpack(pUnpacker,sFileName,sResultFileName);
+                QList<XvdgUnpackerPluginInterface::OPTIONS_RECORD> listOptions=Xvdg_utils::getDefaultOptions(pUnpacker);
+
+                Xvdg_utils::rtUnpack(pUnpacker,sFileName,sResultFileName,&listOptions);
             }
         }
     }
