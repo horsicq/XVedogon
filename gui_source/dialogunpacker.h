@@ -23,6 +23,7 @@
 
 #include <QDialog>
 #include <QFileDialog>
+#include <QCheckBox>
 #include "dialogunpackerprocess.h"
 
 namespace Ui {
@@ -40,6 +41,8 @@ private slots:
     void on_pushButtonClose_clicked();
     void on_pushButtonUnpack_clicked();
     void on_toolButtonResultFileName_clicked();
+
+    void checkBoxToggled(bool bState);
 
 private:
     Ui::DialogUnpacker *ui;

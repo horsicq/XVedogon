@@ -35,6 +35,31 @@ DialogUnpacker::DialogUnpacker(QObject *pPlugin, QString sFileName, QWidget *par
     setWindowTitle(Xvdg_utils::infoUnpackerToString(Xvdg_utils::getUnpackerPluginInfo(pPlugin)));
 
     ui->lineEditResultFileName->setText(XBinary::getUnpackedName(sFileName));
+
+    int nItemCount=listOptions.count();
+
+    ui->tableWidgetOptions->setColumnCount(2);
+    ui->tableWidgetOptions->setRowCount(nItemCount);
+
+    ui->tableWidgetOptions->setColumnWidth(0,220);
+
+    for(int i=0;i<nItemCount;i++)
+    {
+        QTableWidgetItem *pItem=new QTableWidgetItem(listOptions.at(i).sName);
+
+        ui->tableWidgetOptions->setItem(i,0,pItem);
+
+        if(listOptions.at(i).varType==XvdgUnpackerPluginInterface::OPTIONS_VAR_TYPE_BOOL)
+        {
+            QCheckBox *pCheckBox=new QCheckBox(this);
+            pCheckBox->setProperty("Number",i);
+            pCheckBox->setChecked(listOptions.at(i).var.toBool());
+
+            connect(pCheckBox,SIGNAL(toggled(bool)),this,SLOT(checkBoxToggled(bool)));
+
+            ui->tableWidgetOptions->setCellWidget(i,1,pCheckBox);
+        }
+    }
 }
 
 DialogUnpacker::~DialogUnpacker()
@@ -65,5 +90,17 @@ void DialogUnpacker::on_toolButtonResultFileName_clicked()
     if(!sFileName.isEmpty())
     {
         ui->lineEditResultFileName->setText(sFileName);
+    }
+}
+
+void DialogUnpacker::checkBoxToggled(bool bState)
+{
+    QCheckBox *pCheckBox=qobject_cast<QCheckBox*>(sender());
+
+    int nNumber=pCheckBox->property("Number").toInt();
+
+    if(nNumber<listOptions.count())
+    {
+        listOptions[nNumber].var=bState;
     }
 }
