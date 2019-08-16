@@ -30,7 +30,7 @@ public:
     ConsoleOutput(QObject *parent = 0);
 
 public slots:
-    void infoMessage(QString sText,int type);
+    void messageString(quint32,QString sText);
 };
 
 #endif // CONSOLEOUTPUT_H

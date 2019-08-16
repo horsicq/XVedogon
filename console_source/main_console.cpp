@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
     QCommandLineOption clResultAsXml(QStringList()<<"x"<<"xml","Scan result as XML.");
     QCommandLineOption clUnpack(QStringList()<<"U"<<"unpack","Unpack <method>.","method");
     QCommandLineOption clResult(QStringList()<<"R"<<"result","Result file name.");
+    QCommandLineOption clMessages(QStringList()<<"M"<<"messages","Show messages.");
 
     // TODO options for specific unpacker: -O OPTION:VALUE
 
@@ -66,6 +67,8 @@ int main(int argc, char *argv[])
     parser.addOption(clResultAsXml);
     parser.addOption(clUnpack);
     parser.addOption(clResult);
+    parser.addOption(clMessages);
+
     parser.addHelpOption();
     parser.addVersionOption();
 
@@ -81,15 +84,22 @@ int main(int argc, char *argv[])
 
         QString sUnpackMethod=parser.value(clUnpack);
         pUnpacker=Xvdg_utils::getUnpackerPluginByName(&listModules,sUnpackMethod);
-        if(!pUnpacker)
+        if(pUnpacker)
         {
-            co.infoMessage(QString("Cannot find unpack module: %1").arg(sUnpackMethod),0);
+            if(parser.isSet(clMessages))
+            {
+                QObject::connect(pUnpacker,SIGNAL(messageString(quint32,QString)),&co,SLOT(messageString(quint32,QString)));
+            }
+        }
+        else
+        {
+            co.messageString(0,QString("Cannot find unpack module: %1").arg(sUnpackMethod));
         }
     }
 
     if(parser.isSet(clResult))
     {
-        QString sResultFileName=parser.value(clResult);
+        sResultFileName=parser.value(clResult);
     }
 
     if(parser.isSet(clModules))
@@ -127,7 +137,7 @@ int main(int argc, char *argv[])
             }
             else
             {
-                co.infoMessage(QString("Cannot find: %1").arg(sFileName),0);
+                co.messageString(0,QString("Cannot find: %1").arg(sFileName));
             }
         }
 

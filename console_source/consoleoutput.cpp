@@ -25,9 +25,8 @@ ConsoleOutput::ConsoleOutput(QObject *parent) : QObject(parent)
 
 }
 
-void ConsoleOutput::infoMessage(QString sText,int type)
+void ConsoleOutput::messageString(quint32, QString sText)
 {
-//    QString _sText=QString("[%1] %2").arg(QExecute::messageTypeToString((QExecute::M_TYPES)type)).arg(sText);
     QString _sText=sText;
     printf("%s\n",_sText.toLatin1().data());
 }

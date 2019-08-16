@@ -33,6 +33,7 @@ class DialogUnpacker;
 class DialogUnpacker : public QDialog
 {
     Q_OBJECT
+
 public:
     explicit DialogUnpacker(QObject *pPlugin,QString sFileName,QWidget *parent);
     ~DialogUnpacker();
