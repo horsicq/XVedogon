@@ -36,6 +36,7 @@
 #include "viewer_mach.h"
 #endif
 #include "unpacker_upx.h"
+#include "unpacker_pex.h"
 #else
 #include <QPluginLoader>
 #include <QDirIterator>
