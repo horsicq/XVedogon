@@ -59,4 +59,9 @@ static_plugins {
         XCONFIG += unpacker_pex
         include(xvdg_plugins/unpackers/unpacker_pex/unpacker_pex.pri)
     }
+
+    !contains(XCONFIG, unpacker_aspack) {
+        XCONFIG += unpacker_aspack
+        include(xvdg_plugins/unpackers/unpacker_aspack/unpacker_aspack.pri)
+    }
 }

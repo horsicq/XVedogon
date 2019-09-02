@@ -37,6 +37,7 @@
 #endif
 #include "unpacker_upx.h"
 #include "unpacker_pex.h"
+#include "unpacker_aspack.h"
 #else
 #include <QPluginLoader>
 #include <QDirIterator>
