@@ -38,6 +38,8 @@
 #include "unpacker_upx.h"
 #include "unpacker_pex.h"
 #include "unpacker_aspack.h"
+#include "unpacker_mpress.h"
+#include "unpacker_vmprotect.h"
 #else
 #include <QPluginLoader>
 #include <QDirIterator>

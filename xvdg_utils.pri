@@ -64,4 +64,14 @@ static_plugins {
         XCONFIG += unpacker_aspack
         include(xvdg_plugins/unpackers/unpacker_aspack/unpacker_aspack.pri)
     }
+
+    !contains(XCONFIG, unpacker_vmprotect) {
+        XCONFIG += unpacker_vmprotect
+        include(xvdg_plugins/unpackers/unpacker_vmprotect/unpacker_vmprotect.pri)
+    }
+
+    !contains(XCONFIG, unpacker_mpress) {
+        XCONFIG += unpacker_mpress
+        include(xvdg_plugins/unpackers/unpacker_mpress/unpacker_mpress.pri)
+    }
 }
