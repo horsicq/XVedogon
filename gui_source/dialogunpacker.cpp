@@ -45,7 +45,7 @@ DialogUnpacker::DialogUnpacker(QObject *pPlugin, QString sFileName, QWidget *par
 
     for(int i=0;i<nItemCount;i++)
     {
-        QTableWidgetItem *pItem=new QTableWidgetItem(listOptions.at(i).sName);
+        QTableWidgetItem *pItem=new QTableWidgetItem(listOptions.at(i).sDescription);
 
         ui->tableWidgetOptions->setItem(i,0,pItem);
 

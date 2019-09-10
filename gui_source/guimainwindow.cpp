@@ -240,10 +240,10 @@ void GuiMainWindow::loadPlugins()
     listUnpackerPlugins=Xvdg_utils::getUnpackerPluginList(this);
 
     ui->pushButtonViewers->setEnabled(listViewerPlugins.count());
-    ui->pushButtonViewers->setText(tr("%1: %2").arg(tr("Viewers")).arg(listViewerPlugins.count()));
+    ui->pushButtonViewers->setText(QString("%1: %2").arg(tr("Viewers")).arg(listViewerPlugins.count()));
 
     ui->pushButtonUnpackers->setEnabled(listUnpackerPlugins.count());
-    ui->pushButtonUnpackers->setText(tr("%1: %2").arg(tr("Unpackers")).arg(listUnpackerPlugins.count()));
+    ui->pushButtonUnpackers->setText(QString("%1: %2").arg(tr("Unpackers")).arg(listUnpackerPlugins.count()));
 }
 
 void GuiMainWindow::on_pushButtonAbout_clicked()

@@ -330,3 +330,41 @@ void Xvdg_utils::rtStop(QObject *pPlugin)
         pPluginInterface->rtStop();
     }
 }
+
+QString Xvdg_utils::optionToString(XvdgUnpackerPluginInterface::OPTIONS_RECORD record)
+{
+    QString sResult;
+    QString sValue;
+
+    if(record.varType==XvdgUnpackerPluginInterface::OPTIONS_VAR_TYPE_BOOL)
+    {
+        sValue=record.var.toBool()?QString("true"):QString("false");
+    }
+
+    sResult+=QString("%1:%2").arg(record.sName).arg(sValue);
+
+    int nSize=20-sResult.size();
+
+    for(int i=0;i<nSize;i++)
+    {
+        sResult+=" ";
+    }
+
+    sResult+=QString("// %1").arg(record.sDescription);
+
+    return sResult;
+}
+
+bool Xvdg_utils::stringToOption(QObject *pPlugin,QString sString, XvdgUnpackerPluginInterface::OPTIONS_RECORD *pRecord)
+{
+    bool bResult=false;
+
+    XvdgUnpackerPluginInterface *pPluginInterface=qobject_cast<XvdgUnpackerPluginInterface *>(pPlugin);
+
+    if(pPluginInterface)
+    {
+        bResult=pPluginInterface->stringToOption(sString,pRecord);
+    }
+
+    return bResult;
+}

@@ -55,8 +55,10 @@ int main(int argc, char *argv[])
     QCommandLineOption clDeepScan(QStringList()<<"d"<<"deepscan","Deep scan.");
     QCommandLineOption clResultAsXml(QStringList()<<"x"<<"xml","Scan result as XML.");
     QCommandLineOption clUnpack(QStringList()<<"U"<<"unpack","Unpack <method>.","method");
+    QCommandLineOption clDefault(QStringList()<<"D"<<"default","Default unpack options <method>.","method");
     QCommandLineOption clResult(QStringList()<<"R"<<"result","Result file name.");
     QCommandLineOption clMessages(QStringList()<<"M"<<"messages","Show messages.");
+    QCommandLineOption clOption(QStringList()<<"O"<<"option","Unpack <option>.","option");
 
     // TODO options for specific unpacker: -O OPTION:VALUE
 
@@ -66,8 +68,10 @@ int main(int argc, char *argv[])
     parser.addOption(clDeepScan);
     parser.addOption(clResultAsXml);
     parser.addOption(clUnpack);
+    parser.addOption(clDefault);
     parser.addOption(clResult);
     parser.addOption(clMessages);
+    parser.addOption(clOption);
 
     parser.addHelpOption();
     parser.addVersionOption();
@@ -97,6 +101,32 @@ int main(int argc, char *argv[])
         }
     }
 
+    if(parser.isSet(clDefault))
+    {
+        bIsUsed=true;
+
+        QString sUnpackMethod=parser.value(clDefault);
+
+        QObject *_pUnpacker=Xvdg_utils::getUnpackerPluginByName(&listModules,sUnpackMethod);
+        if(_pUnpacker)
+        {
+            co.messageString(0,QString("Default options for: %1").arg(sUnpackMethod));
+
+            QList<XvdgUnpackerPluginInterface::OPTIONS_RECORD> listOptions=Xvdg_utils::getDefaultOptions(_pUnpacker);
+
+            int nCount=listOptions.count();
+
+            for(int i=0;i<nCount;i++)
+            {
+                co.messageString(0,Xvdg_utils::optionToString(listOptions.at(i)));
+            }
+        }
+        else
+        {
+            co.messageString(0,QString("Cannot find unpack module: %1").arg(sUnpackMethod));
+        }
+    }
+
     if(parser.isSet(clResult))
     {
         sResultFileName=parser.value(clResult);
@@ -107,7 +137,7 @@ int main(int argc, char *argv[])
         bIsUsed=true;
 
         QString sInfo=(QString("%1 module(s): ").arg(listModules.count()));
-        printf("%s\n",sInfo.toLatin1().data());
+        co.messageString(0,sInfo);
 
         QList<XvdgUnpackerPluginInterface::INFO> listInfos=Xvdg_utils::getUnpackerPluginInfos(&listModules);
 
@@ -115,7 +145,7 @@ int main(int argc, char *argv[])
 
         for(int i=0;i<nCount;i++)
         {
-            printf("%s\n",Xvdg_utils::infoUnpackerToString(listInfos.at(i)).toLatin1().data());
+            co.messageString(0,Xvdg_utils::infoUnpackerToString(listInfos.at(i)));
         }
     }
 
@@ -150,7 +180,7 @@ int main(int argc, char *argv[])
 
             if(bShowFileName)
             {
-                printf("%s:\n",sFileName.toLatin1().data());
+                co.messageString(0,sFileName);
             }
 
             if(     parser.isSet(clScan)        ||
@@ -169,7 +199,7 @@ int main(int argc, char *argv[])
                 SpecAbstract::SCAN_RESULT scanResult=StaticScan::processFile(sFileName,&scanOptions);
                 StaticScanItemModel model(&scanResult.listRecords);
 
-                printf("%s\n",model.toString(&scanOptions).toLatin1().data());
+                co.messageString(0,model.toString(&scanOptions));
 
                 int nRecordsCount=scanResult.listRecords.count();
 
@@ -180,21 +210,56 @@ int main(int argc, char *argv[])
                     {
 //                        XvdgUnpackerPluginInterface::INFO info=pPlugin->getInfo();
                         // TODO not overlay!
-                        printf("Available unpack method: %s\n",Xvdg_utils::getUnpackerPluginInfo(pPlugin).sName.toLatin1().data());
+                        co.messageString(0,QString("Available unpack method: %1").arg(Xvdg_utils::getUnpackerPluginInfo(pPlugin).sName));
                     }
                 }
             }
 
-            if(pUnpacker)
+            if(parser.isSet(clUnpack)&&pUnpacker)
             {
+                bool bSuccess=true;
+
                 if(sResultFileName=="")
                 {
                     sResultFileName=XBinary::getUnpackedName(sFileName);
                 }
 
-                QList<XvdgUnpackerPluginInterface::OPTIONS_RECORD> listOptions=Xvdg_utils::getDefaultOptions(pUnpacker);
+                QList<XvdgUnpackerPluginInterface::OPTIONS_RECORD> listOptions;
 
-                Xvdg_utils::rtUnpack(pUnpacker,sFileName,sResultFileName,&listOptions);
+                if(parser.isSet(clOption))
+                {
+                    QList<QString> listValues=parser.values(clOption);
+
+                    int nCount=listValues.count();
+
+                    for(int i=0;i<nCount;i++)
+                    {
+                        QString sOption=listValues.at(i);
+
+                        XvdgUnpackerPluginInterface::OPTIONS_RECORD record={};
+
+                        if(Xvdg_utils::stringToOption(pUnpacker,sOption,&record))
+                        {
+                            listOptions.append(record);
+                        }
+                        else
+                        {
+                            co.messageString(0,QString("Invalid option: %1").arg(sOption));
+
+                            bSuccess=false;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    listOptions=Xvdg_utils::getDefaultOptions(pUnpacker);
+                }
+
+                if(bSuccess)
+                {
+                    Xvdg_utils::rtUnpack(pUnpacker,sFileName,sResultFileName,&listOptions);
+                }
             }
         }
     }

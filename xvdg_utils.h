@@ -67,6 +67,8 @@ public:
     static QList<XvdgUnpackerPluginInterface::OPTIONS_RECORD> getDefaultOptions(QObject *pPlugin);
     static bool rtUnpack(QObject *pPlugin, QString sFileName, QString sResultFileName,QList<XvdgUnpackerPluginInterface::OPTIONS_RECORD> *pListOptions);
     static void rtStop(QObject *pPlugin);
+    static QString optionToString(XvdgUnpackerPluginInterface::OPTIONS_RECORD record);
+    static bool stringToOption(QObject *pPlugin, QString sString,XvdgUnpackerPluginInterface::OPTIONS_RECORD *pRecord);
 };
 
 #endif // XVDG_UTILS_H
