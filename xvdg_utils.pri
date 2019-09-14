@@ -79,4 +79,9 @@ static_plugins {
         XCONFIG += unpacker_pecompact
         include(xvdg_plugins/unpackers/unpacker_pecompact/unpacker_pecompact.pri)
     }
+
+    !contains(XCONFIG, unpacker_ahpacker) {
+        XCONFIG += unpacker_ahpacker
+        include(xvdg_plugins/unpackers/unpacker_ahpacker/unpacker_ahpacker.pri)
+    }
 }
