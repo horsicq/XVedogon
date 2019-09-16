@@ -42,6 +42,7 @@
 #include "unpacker_vmprotect.h"
 #include "unpacker_pecompact.h"
 #include "unpacker_ahpacker.h"
+#include "unpacker_kkrunchy.h"
 #else
 #include <QPluginLoader>
 #include <QDirIterator>

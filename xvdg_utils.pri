@@ -84,4 +84,9 @@ static_plugins {
         XCONFIG += unpacker_ahpacker
         include(xvdg_plugins/unpackers/unpacker_ahpacker/unpacker_ahpacker.pri)
     }
+
+    !contains(XCONFIG, unpacker_kkrunchy) {
+        XCONFIG += unpacker_kkrunchy
+        include(xvdg_plugins/unpackers/unpacker_kkrunchy/unpacker_kkrunchy.pri)
+    }
 }
