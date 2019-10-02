@@ -89,4 +89,14 @@ static_plugins {
         XCONFIG += unpacker_kkrunchy
         include(xvdg_plugins/unpackers/unpacker_kkrunchy/unpacker_kkrunchy.pri)
     }
+
+    !contains(XCONFIG, unpacker_beroexepacker) {
+        XCONFIG += unpacker_beroexepacker
+        include(xvdg_plugins/unpackers/unpacker_beroexepacker/unpacker_beroexepacker.pri)
+    }
+
+    !contains(XCONFIG, unpacker_petite) {
+        XCONFIG += unpacker_petite
+        include(xvdg_plugins/unpackers/unpacker_petite/unpacker_petite.pri)
+    }
 }

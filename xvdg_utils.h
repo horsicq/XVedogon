@@ -43,6 +43,8 @@
 #include "unpacker_pecompact.h"
 #include "unpacker_ahpacker.h"
 #include "unpacker_kkrunchy.h"
+#include "unpacker_beroexepacker.h"
+#include "unpacker_petite.h"
 #else
 #include <QPluginLoader>
 #include <QDirIterator>

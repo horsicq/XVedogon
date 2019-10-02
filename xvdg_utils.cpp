@@ -181,6 +181,8 @@ QList<QObject *> Xvdg_utils::getUnpackerPluginList(QObject *pParent)
     listResult.append(new Unpacker_PECompact(pParent));
     listResult.append(new Unpacker_AHPacker(pParent));
     listResult.append(new Unpacker_kkrunchy(pParent));
+    listResult.append(new Unpacker_BeRoEXEPacker(pParent));
+    listResult.append(new Unpacker_Petite(pParent));
 #else
     QString sPluginPath=QCoreApplication::applicationDirPath()+QDir::separator()+"unpackers";
 
