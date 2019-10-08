@@ -99,4 +99,9 @@ static_plugins {
         XCONFIG += unpacker_petite
         include(xvdg_plugins/unpackers/unpacker_petite/unpacker_petite.pri)
     }
+
+    !contains(XCONFIG, unpacker_fsg) {
+        XCONFIG += unpacker_fsg
+        include(xvdg_plugins/unpackers/unpacker_fsg/unpacker_fsg.pri)
+    }
 }
