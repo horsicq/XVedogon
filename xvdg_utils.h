@@ -46,6 +46,7 @@
 #include "unpacker_beroexepacker.h"
 #include "unpacker_petite.h"
 #include "unpacker_fsg.h"
+#include "unpacker_nspack.h"
 #else
 #include <QPluginLoader>
 #include <QDirIterator>
