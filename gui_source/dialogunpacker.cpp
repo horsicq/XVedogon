@@ -95,7 +95,7 @@ void DialogUnpacker::on_toolButtonResultFileName_clicked()
 
 void DialogUnpacker::checkBoxToggled(bool bState)
 {
-    QCheckBox *pCheckBox=qobject_cast<QCheckBox*>(sender());
+    QCheckBox *pCheckBox=qobject_cast<QCheckBox *>(sender());
 
     int nNumber=pCheckBox->property("Number").toInt();
 

@@ -296,7 +296,7 @@ void GuiMainWindow::handleItem(QList<SRECORD> *pListButtons, StaticScanItem *pIt
 
 void GuiMainWindow::pushButtonSlot()
 {
-    QPushButton *pPushButton=qobject_cast<QPushButton*>(sender());
+    QPushButton *pPushButton=qobject_cast<QPushButton *>(sender());
     QString sUID=pPushButton->property("uid").toString();
     BUTTON_INFO bi=mapButtonInfos.value(sUID);
 
