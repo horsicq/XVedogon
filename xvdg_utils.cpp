@@ -31,6 +31,8 @@ QList<QObject *> Xvdg_utils::getViewerPluginList(QObject *pParent)
     listResult.append(new Viewer_ELF(pParent));
     listResult.append(new Viewer_MSDOS(pParent));
     listResult.append(new Viewer_MACH(pParent));
+    listResult.append(new Viewer_LE(pParent));
+    listResult.append(new Viewer_NE(pParent));
 #else
     QString sPluginPath=QCoreApplication::applicationDirPath()+QDir::separator()+"viewers";
 

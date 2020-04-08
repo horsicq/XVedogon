@@ -34,6 +34,8 @@
 #include "viewer_elf.h"
 #include "viewer_msdos.h"
 #include "viewer_mach.h"
+#include "viewer_le.h"
+#include "viewer_ne.h"
 #endif
 #include "unpacker_upx.h"
 #include "unpacker_pex.h"

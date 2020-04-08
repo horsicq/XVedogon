@@ -48,6 +48,14 @@ static_plugins {
             XCONFIG += viewer_plugin_pe
             include(xvdg_plugins/viewers/viewer_pe/viewer_pe.pri)
         }
+        !contains(XCONFIG, viewer_plugin_le) {
+            XCONFIG += viewer_plugin_le
+            include(xvdg_plugins/viewers/viewer_le/viewer_le.pri)
+        }
+        !contains(XCONFIG, viewer_plugin_ne) {
+            XCONFIG += viewer_plugin_ne
+            include(xvdg_plugins/viewers/viewer_ne/viewer_ne.pri)
+        }
     }
 
     !contains(XCONFIG, unpacker_upx) {
