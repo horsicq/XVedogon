@@ -25,3 +25,6 @@
 [submodule "XProcess"]
 	path = XProcess
 	url = https://github.com/horsicq/XProcess.git
+[submodule "XMemoryMapWidget"]
+	path = XMemoryMapWidget
+	url = https://github.com/horsicq/XMemoryMapWidget.git
