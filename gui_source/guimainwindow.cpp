@@ -86,7 +86,7 @@ void GuiMainWindow::_scan(QString sFileName)
         SpecAbstract::SCAN_RESULT scanResult;
 
         SpecAbstract::SCAN_OPTIONS options= {0};
-        options.bRecursive=ui->checkBoxRecursive->isChecked();
+        options.bRecursiveScan=ui->checkBoxRecursive->isChecked();
         options.bDeepScan=ui->checkBoxDeepScan->isChecked();
 
         DialogStaticScan ds(this);
