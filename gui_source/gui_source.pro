@@ -12,44 +12,26 @@ TEMPLATE = app
 CONFIG += c++11
 
 SOURCES += \
-        dialogviewer.cpp \
         guimainwindow.cpp \
         main_gui.cpp \
         dialogoptions.cpp \
-        dialogabout.cpp \
-        dialogviewers.cpp \
-        dialogunpackers.cpp \
-    dialogunpacker.cpp \
-    unpackerthread.cpp \
-    dialogunpackerprocess.cpp
+        dialogabout.cpp
 
 HEADERS += \
-        dialogviewer.h \
         guimainwindow.h \
         dialogoptions.h \
-        dialogabout.h \
-        dialogviewers.h \
-        dialogunpackers.h \
-    dialogunpacker.h \
-    unpackerthread.h \
-    dialogunpackerprocess.h
+        dialogabout.h
 
 FORMS += \
-        dialogviewer.ui \
         guimainwindow.ui \
         dialogoptions.ui \
-        dialogabout.ui \
-        dialogviewers.ui \
-        dialogunpackers.ui \
-    dialogunpacker.ui \
-    dialogunpackerprocess.ui
+        dialogabout.ui
 
 include(../build.pri)
-include(../xvdg_utils.pri)
 
-!contains(XCONFIG, formresult) {
-    XCONFIG += formresult
-    include(../StaticScan/dialogstaticscan.pri)
+!contains(XCONFIG, dialogstaticscanprocess) {
+    XCONFIG += dialogstaticscanprocess
+    include(../../_mylibs/StaticScan/dialogstaticscanprocess.pri)
 }
 
 win32 {

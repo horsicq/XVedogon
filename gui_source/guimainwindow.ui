@@ -104,20 +104,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButtonViewers">
-        <property name="text">
-         <string>Viewers</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonUnpackers">
-        <property name="text">
-         <string>Unpackers</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>

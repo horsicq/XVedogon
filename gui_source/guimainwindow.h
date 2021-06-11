@@ -29,12 +29,6 @@
 #include "dialogstaticscan.h"
 #include "dialogoptions.h"
 #include "dialogabout.h"
-#include "dialogviewers.h"
-#include "dialogunpackers.h"
-#include "dialogviewer.h"
-#include "dialogunpacker.h"
-#include "viewer_plugin_interface.h"
-#include "xvdg_utils.h"
 
 namespace Ui {
 class GuiMainWindow;
@@ -48,30 +42,6 @@ public:
     explicit GuiMainWindow(QWidget *parent=nullptr);
     ~GuiMainWindow();
 
-private:
-    struct SRECORD
-    {
-        SpecAbstract::SCAN_STRUCT scanStruct;
-        QModelIndex modelIndex1;
-        QModelIndex modelIndex2;
-    };
-
-    enum BUTTON_INFO_TYPE
-    {
-        BUTTON_INFO_TYPE_UNKNOWN=1,
-        BUTTON_INFO_TYPE_VIEWER,
-        BUTTON_INFO_TYPE_RTUNPACK // TODO Static
-    };
-
-    struct BUTTON_INFO
-    {
-        // TODO RunTime, directory
-        QObject *pPlugin;
-        BUTTON_INFO_TYPE biType;
-        qint64 nOffset;
-        qint64 nSize;
-    };
-
 private slots:
     void on_pushButtonExit_clicked();
     void on_pushButtonOpenFile_clicked();
@@ -80,17 +50,10 @@ private slots:
     void adjust();
 
     void on_pushButtonOptions_clicked();
-    void loadPlugins();
 
     void on_pushButtonAbout_clicked();
     void on_pushButtonClear_clicked();
     void on_pushButtonSave_clicked();
-
-    void on_pushButtonViewers_clicked();
-
-    void handleItem(QList<SRECORD> *pListButtons, StaticScanItem *pItem, StaticScanItemModel *pModel, QModelIndex modelIndexParent);
-    void pushButtonSlot();
-    void on_pushButtonUnpackers_clicked();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -100,9 +63,6 @@ protected:
 private:
     Ui::GuiMainWindow *ui;
     XVDG::OPTIONS xvdgOptions;
-    QList<QObject *> listViewerPlugins;
-    QList<QObject *> listUnpackerPlugins;
-    QMap<QString,BUTTON_INFO> mapButtonInfos;
 };
 
 #endif // GUIMAINWINDOW_H

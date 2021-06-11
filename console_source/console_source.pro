@@ -18,7 +18,6 @@ SOURCES += \
     consoleoutput.cpp
 
 include(../build.pri)
-include(../xvdg_utils.pri)
 
 HEADERS += \
     consoleoutput.h
