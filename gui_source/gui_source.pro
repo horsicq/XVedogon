@@ -31,7 +31,7 @@ include(../build.pri)
 
 !contains(XCONFIG, dialogstaticscanprocess) {
     XCONFIG += dialogstaticscanprocess
-    include(../../_mylibs/StaticScan/dialogstaticscanprocess.pri)
+    include(../StaticScan/dialogstaticscanprocess.pri)
 }
 
 win32 {
