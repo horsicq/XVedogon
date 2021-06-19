@@ -34,6 +34,10 @@ GuiMainWindow::GuiMainWindow(QWidget *parent) :
     DialogOptions::loadOptions(&xvdgOptions); // TODO
     adjust();
 
+    ui->checkBoxDeepScan->setChecked(true);
+    ui->checkBoxRecursive->setChecked(true);
+    ui->checkBoxHeuristic->setChecked(false);
+
     if(QCoreApplication::arguments().count()>1)
     {
         QString sFileName=QCoreApplication::arguments().at(1);
@@ -95,7 +99,7 @@ void GuiMainWindow::_scan(QString sFileName)
             xvdgOptions.sLastDirectory=fi.absolutePath();
         }
 
-        StaticScanItemModel *model=new StaticScanItemModel(&(scanResult.listRecords),this,3);
+        StaticScanItemModel *model=new StaticScanItemModel(&(scanResult.listRecords),this);
         ui->treeViewResult->setModel(model);
 
 //        ui->treeViewResult->setColumnWidth(1,40);
@@ -126,9 +130,6 @@ void GuiMainWindow::adjust()
         wf&=~(Qt::WindowStaysOnTopHint);
     }
     setWindowFlags(wf);
-
-    ui->checkBoxDeepScan->setChecked(xvdgOptions.bDeepScan);
-    ui->checkBoxRecursive->setChecked(xvdgOptions.bRecursive);
 
     show();
 }
