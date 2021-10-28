@@ -48,12 +48,12 @@ private slots:
     void _scan(QString sFileName);
     void on_pushButtonScan_clicked();
     void adjust();
-
     void on_pushButtonOptions_clicked();
-
     void on_pushButtonAbout_clicked();
     void on_pushButtonClear_clicked();
     void on_pushButtonSave_clicked();
+    void on_pushButtonUnpack_clicked();
+    void on_pushButtonAdvanced_clicked();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;

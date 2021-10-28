@@ -192,3 +192,15 @@ void GuiMainWindow::on_pushButtonSave_clicked()
     QAbstractItemModel *pModel=ui->treeViewResult->model();
     DialogStaticScanProcess::saveResult(this,(StaticScanItemModel *)pModel,sSaveFileNameDirectory);
 }
+
+void GuiMainWindow::on_pushButtonUnpack_clicked()
+{
+    // TODO
+}
+
+void GuiMainWindow::on_pushButtonAdvanced_clicked()
+{
+    // TODO
+    // Windows with advanced options
+}
+
