@@ -106,6 +106,3 @@
 [submodule "Controls"]
 	path = Controls
 	url = https://github.com/horsicq/Controls
-[submodule "QHexView"]
-	path = QHexView
-	url = https://github.com/horsicq/QHexView
