@@ -106,3 +106,6 @@
 [submodule "Controls"]
 	path = Controls
 	url = https://github.com/horsicq/Controls
+[submodule "XInfoDB"]
+	path = XInfoDB
+	url = https://github.com/horsicq/XInfoDB
