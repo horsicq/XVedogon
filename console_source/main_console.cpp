@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     QCommandLineParser parser;
     QString sDescription;
     sDescription.append(QString("%1 v%2\n").arg(X_APPLICATIONNAME,X_APPLICATIONVERSION));
-    sDescription.append(QString("%1").arg("Copyright(C) 2019-2021 hors<horsicq@gmail.com> Web: http://ntinfo.biz\n"));
+    sDescription.append(QString("%1").arg("Copyright(C) 2019-2023 hors<horsicq@gmail.com> Web: http://ntinfo.biz\n"));
 //    sDescription.append(QString("%1 module(s)").arg(listModules.count()));
     parser.setApplicationDescription(sDescription);
 
