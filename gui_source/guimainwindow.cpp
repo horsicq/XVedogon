@@ -99,8 +99,10 @@ void GuiMainWindow::_scan(QString sFileName)
             xvdgOptions.sLastDirectory=fi.absolutePath();
         }
 
-        StaticScanItemModel *model=new StaticScanItemModel(&(scanResult.listRecords),this);
-        ui->treeViewResult->setModel(model);
+        QList<XBinary::SCANSTRUCT> _listRecords = SpecAbstract::convert(&(scanResult.listRecords));
+
+        ScanItemModel *pModel=new ScanItemModel(&_listRecords);
+        ui->treeViewResult->setModel(pModel);
 
 //        ui->treeViewResult->setColumnWidth(1,40);
 //        ui->treeViewResult->setColumnWidth(2,40);
@@ -190,7 +192,7 @@ void GuiMainWindow::on_pushButtonSave_clicked()
     QString sSaveFileNameDirectory=xvdgOptions.sLastDirectory+QDir::separator()+"result"; // mb TODO
 
     QAbstractItemModel *pModel=ui->treeViewResult->model();
-    DialogStaticScanProcess::saveResult(this,(StaticScanItemModel *)pModel,sSaveFileNameDirectory);
+    DialogStaticScanProcess::saveResult(this,(ScanItemModel *)pModel,sSaveFileNameDirectory);
 }
 
 void GuiMainWindow::on_pushButtonUnpack_clicked()
