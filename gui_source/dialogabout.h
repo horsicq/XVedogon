@@ -1,4 +1,4 @@
-// copyright (c) 2020-2023 hors<horsicq@gmail.com>
+// copyright (c) 2020-2024 hors<horsicq@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -28,18 +28,18 @@ namespace Ui {
 class DialogAbout;
 }
 
-class DialogAbout : public QDialog
-{
+class DialogAbout : public QDialog {
     Q_OBJECT
 
 public:
-    explicit DialogAbout(QWidget *parent=nullptr);
+    explicit DialogAbout(QWidget *parent = nullptr);
     ~DialogAbout();
 
 private slots:
     void on_pushButtonOK_clicked();
+
 private:
     Ui::DialogAbout *ui;
 };
 
-#endif // DIALOGABOUT_H
+#endif  // DIALOGABOUT_H

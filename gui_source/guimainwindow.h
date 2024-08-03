@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2023 hors<horsicq@gmail.com>
+// Copyright (c) 2020-2024 hors<horsicq@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,12 +34,11 @@ namespace Ui {
 class GuiMainWindow;
 }
 
-class GuiMainWindow : public QMainWindow
-{
+class GuiMainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit GuiMainWindow(QWidget *parent=nullptr);
+    explicit GuiMainWindow(QWidget *parent = nullptr);
     ~GuiMainWindow();
 
 private slots:
@@ -65,4 +64,4 @@ private:
     XVDG::OPTIONS xvdgOptions;
 };
 
-#endif // GUIMAINWINDOW_H
+#endif  // GUIMAINWINDOW_H

@@ -28,19 +28,17 @@
 #define X_ORGANIZATIONNAME "NTInfo"
 #define X_ORGANIZATIONDOMAIN "ntinfo.biz"
 
-namespace XVDG
-{
-    struct OPTIONS
-    {
-        bool bScanAfterOpen;
-        bool bRecursive;
-        bool bDeepScan;
-        bool bSaveLastDirectory;
-        QString sLastDirectory;
+namespace XVDG {
+struct OPTIONS {
+    bool bScanAfterOpen;
+    bool bRecursive;
+    bool bDeepScan;
+    bool bSaveLastDirectory;
+    QString sLastDirectory;
 
-        bool bStayOnTop;
-        bool bContext;
-    };
-}
+    bool bStayOnTop;
+    bool bContext;
+};
+}  // namespace XVDG
 
-#endif // _GLOBAL_H
+#endif  // _GLOBAL_H

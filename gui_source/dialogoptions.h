@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2023 hors<horsicq@gmail.com>
+// Copyright (c) 2020-2024 hors<horsicq@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,12 +30,11 @@ namespace Ui {
 class DialogOptions;
 }
 
-class DialogOptions : public QDialog
-{
+class DialogOptions : public QDialog {
     Q_OBJECT
 
 public:
-    explicit DialogOptions(QWidget *parent,XVDG::OPTIONS *pOptions);
+    explicit DialogOptions(QWidget *parent, XVDG::OPTIONS *pOptions);
     ~DialogOptions();
 
     static void loadOptions(XVDG::OPTIONS *pOptions);
@@ -43,7 +42,7 @@ public:
     static bool checkContext(QString sType);
     static void clearContext(QString sType);
     static void registerContext(QString sType);
-    static bool setContextState(QString sType,bool bState);
+    static bool setContextState(QString sType, bool bState);
 
 private slots:
     void on_pushButtonOK_clicked();
@@ -54,4 +53,4 @@ private:
     XVDG::OPTIONS *pOptions;
 };
 
-#endif // DIALOGOPTIONS_H
+#endif  // DIALOGOPTIONS_H

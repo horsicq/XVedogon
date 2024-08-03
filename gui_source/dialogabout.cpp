@@ -1,4 +1,4 @@
-// copyright (c) 2020-2023 hors<horsicq@gmail.com>
+// copyright (c) 2020-2024 hors<horsicq@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,17 +21,13 @@
 #include "dialogabout.h"
 #include "ui_dialogabout.h"
 
-DialogAbout::DialogAbout(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::DialogAbout)
+DialogAbout::DialogAbout(QWidget *parent) : QDialog(parent), ui(new Ui::DialogAbout)
 {
     ui->setupUi(this);
 
     ui->labelLogo->setPixmap(QPixmap(QString::fromUtf8(":/pics/logo.png")));
 
-    ui->labelVersion->setText(QString("<span style=\" font-weight:600;\">%1 %2</span>")
-                              .arg(QApplication::applicationName())
-                              .arg(QApplication::applicationVersion()));
+    ui->labelVersion->setText(QString("<span style=\" font-weight:600;\">%1 %2</span>").arg(QApplication::applicationName()).arg(QApplication::applicationVersion()));
 }
 
 DialogAbout::~DialogAbout()

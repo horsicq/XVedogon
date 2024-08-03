@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2023 hors<horsicq@gmail.com>
+// Copyright (c) 2019-2024 hors<horsicq@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -38,23 +38,43 @@ int main(int argc, char *argv[])
 
     QCommandLineParser parser;
     QString sDescription;
-    sDescription.append(QString("%1 v%2\n").arg(X_APPLICATIONNAME,X_APPLICATIONVERSION));
-    sDescription.append(QString("%1").arg("Copyright(C) 2019-2023 hors<horsicq@gmail.com> Web: http://ntinfo.biz\n"));
-//    sDescription.append(QString("%1 module(s)").arg(listModules.count()));
+    sDescription.append(QString("%1 v%2\n").arg(X_APPLICATIONNAME, X_APPLICATIONVERSION));
+    sDescription.append(QString("%1").arg("Copyright(C) 2019-2024 hors<horsicq@gmail.com> Web: http://ntinfo.biz\n"));
+    //    sDescription.append(QString("%1 module(s)").arg(listModules.count()));
     parser.setApplicationDescription(sDescription);
 
-    parser.addPositionalArgument("file","The file to open.");
+    parser.addPositionalArgument("file", "The file to open.");
 
-    QCommandLineOption clModules(QStringList()<<"m"<<"modules","Show all modules.");
-    QCommandLineOption clScan(QStringList()<<"S"<<"scan","Scan.");
-    QCommandLineOption clRecursive(QStringList()<<"r"<<"recursive","Recursive.");
-    QCommandLineOption clDeepScan(QStringList()<<"d"<<"deepscan","Deep scan.");
-    QCommandLineOption clResultAsXml(QStringList()<<"x"<<"xml","Scan result as XML.");
-    QCommandLineOption clUnpack(QStringList()<<"U"<<"unpack","Unpack <method>.","method");
-    QCommandLineOption clDefault(QStringList()<<"D"<<"default","Default unpack options <method>.","method");
-    QCommandLineOption clResult(QStringList()<<"R"<<"result","Result file name.");
-    QCommandLineOption clMessages(QStringList()<<"M"<<"messages","Show messages.");
-    QCommandLineOption clOption(QStringList()<<"O"<<"option","Unpack <option>.","option");
+    QCommandLineOption clModules(QStringList() << "m"
+                                               << "modules",
+                                 "Show all modules.");
+    QCommandLineOption clScan(QStringList() << "S"
+                                            << "scan",
+                              "Scan.");
+    QCommandLineOption clRecursive(QStringList() << "r"
+                                                 << "recursive",
+                                   "Recursive.");
+    QCommandLineOption clDeepScan(QStringList() << "d"
+                                                << "deepscan",
+                                  "Deep scan.");
+    QCommandLineOption clResultAsXml(QStringList() << "x"
+                                                   << "xml",
+                                     "Scan result as XML.");
+    QCommandLineOption clUnpack(QStringList() << "U"
+                                              << "unpack",
+                                "Unpack <method>.", "method");
+    QCommandLineOption clDefault(QStringList() << "D"
+                                               << "default",
+                                 "Default unpack options <method>.", "method");
+    QCommandLineOption clResult(QStringList() << "R"
+                                              << "result",
+                                "Result file name.");
+    QCommandLineOption clMessages(QStringList() << "M"
+                                                << "messages",
+                                  "Show messages.");
+    QCommandLineOption clOption(QStringList() << "O"
+                                              << "option",
+                                "Unpack <option>.", "option");
 
     // TODO options for specific unpacker: -O OPTION:VALUE
 
@@ -74,10 +94,9 @@ int main(int argc, char *argv[])
 
     parser.process(app);
 
-    bool bIsUsed=false;
+    bool bIsUsed = false;
 
-    if(!bIsUsed)
-    {
+    if (!bIsUsed) {
         parser.showHelp();
         Q_UNREACHABLE();
     }

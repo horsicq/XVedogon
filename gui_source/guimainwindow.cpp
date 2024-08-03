@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2023 hors<horsicq@gmail.com>
+// Copyright (c) 2020-2024 hors<horsicq@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +21,23 @@
 #include "guimainwindow.h"
 #include "ui_guimainwindow.h"
 
-GuiMainWindow::GuiMainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::GuiMainWindow)
+GuiMainWindow::GuiMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::GuiMainWindow)
 {
     ui->setupUi(this);
 
-    setWindowTitle(QString("%1 v%2").arg(X_APPLICATIONNAME).arg(X_APPLICATIONVERSION)); // TODO
+    setWindowTitle(QString("%1 v%2").arg(X_APPLICATIONNAME).arg(X_APPLICATIONVERSION));  // TODO
 
     setAcceptDrops(true);
 
-    DialogOptions::loadOptions(&xvdgOptions); // TODO
+    DialogOptions::loadOptions(&xvdgOptions);  // TODO
     adjust();
 
     ui->checkBoxDeepScan->setChecked(true);
     ui->checkBoxRecursive->setChecked(true);
     ui->checkBoxHeuristic->setChecked(false);
 
-    if(QCoreApplication::arguments().count()>1)
-    {
-        QString sFileName=QCoreApplication::arguments().at(1);
+    if (QCoreApplication::arguments().count() > 1) {
+        QString sFileName = QCoreApplication::arguments().at(1);
 
         _scan(sFileName);
     }
@@ -61,19 +58,16 @@ void GuiMainWindow::on_pushButtonExit_clicked()
 void GuiMainWindow::on_pushButtonOpenFile_clicked()
 {
     QString sDirectory;
-    if(xvdgOptions.bSaveLastDirectory&&QDir().exists(xvdgOptions.sLastDirectory))
-    {
-        sDirectory=xvdgOptions.sLastDirectory;
+    if (xvdgOptions.bSaveLastDirectory && QDir().exists(xvdgOptions.sLastDirectory)) {
+        sDirectory = xvdgOptions.sLastDirectory;
     }
 
-    QString sFileName=QFileDialog::getOpenFileName(this,tr("Open file..."),sDirectory,tr("All files (*)"));
+    QString sFileName = QFileDialog::getOpenFileName(this, tr("Open file..."), sDirectory, tr("All files (*)"));
 
-    if(!sFileName.isEmpty())
-    {
+    if (!sFileName.isEmpty()) {
         ui->lineEditFileName->setText(sFileName);
 
-        if(xvdgOptions.bScanAfterOpen)
-        {
+        if (xvdgOptions.bScanAfterOpen) {
             _scan(sFileName);
         }
     }
@@ -81,33 +75,29 @@ void GuiMainWindow::on_pushButtonOpenFile_clicked()
 
 void GuiMainWindow::_scan(QString sFileName)
 {
-    if((sFileName!="")&&(QFileInfo(sFileName).isFile()))
-    {
-        SpecAbstract::SCAN_RESULT scanResult;
+    if ((sFileName != "") && (QFileInfo(sFileName).isFile())) {
+        XScanEngine::SCAN_RESULT scanResult;
 
-        SpecAbstract::SCAN_OPTIONS options= {0};
-        options.bRecursiveScan=ui->checkBoxRecursive->isChecked();
-        options.bDeepScan=ui->checkBoxDeepScan->isChecked();
+        XScanEngine::SCAN_OPTIONS options = {0};
+        options.bIsRecursiveScan = ui->checkBoxRecursive->isChecked();
+        options.bIsDeepScan = ui->checkBoxDeepScan->isChecked();
 
         DialogStaticScanProcess ds(this);
-        ds.setData(sFileName,&options,&scanResult);
+        ds.setData(sFileName, &options, &scanResult);
         ds.exec();
 
-        if(xvdgOptions.bSaveLastDirectory)
-        {
+        if (xvdgOptions.bSaveLastDirectory) {
             QFileInfo fi(sFileName);
-            xvdgOptions.sLastDirectory=fi.absolutePath();
+            xvdgOptions.sLastDirectory = fi.absolutePath();
         }
 
-        QList<XBinary::SCANSTRUCT> _listRecords = SpecAbstract::convert(&(scanResult.listRecords));
-
-        ScanItemModel *pModel=new ScanItemModel(&_listRecords);
+        ScanItemModel *pModel = new ScanItemModel(&options, &scanResult.listRecords, 1);
         ui->treeViewResult->setModel(pModel);
 
-//        ui->treeViewResult->setColumnWidth(1,40);
-//        ui->treeViewResult->setColumnWidth(2,40);
+        //        ui->treeViewResult->setColumnWidth(1,40);
+        //        ui->treeViewResult->setColumnWidth(2,40);
 
-        ui->treeViewResult->header()->setSectionResizeMode(0,QHeaderView::Stretch);  // TODO Check Qt 4!
+        ui->treeViewResult->header()->setSectionResizeMode(0, QHeaderView::Stretch);  // TODO Check Qt 4!
 
         ui->treeViewResult->expandAll();
     }
@@ -115,21 +105,18 @@ void GuiMainWindow::_scan(QString sFileName)
 
 void GuiMainWindow::on_pushButtonScan_clicked()
 {
-    QString sFileName=ui->lineEditFileName->text().trimmed();
+    QString sFileName = ui->lineEditFileName->text().trimmed();
 
     _scan(sFileName);
 }
 
 void GuiMainWindow::adjust()
 {
-    Qt::WindowFlags wf=windowFlags();
-    if(xvdgOptions.bStayOnTop)
-    {
-        wf|=Qt::WindowStaysOnTopHint;
-    }
-    else
-    {
-        wf&=~(Qt::WindowStaysOnTopHint);
+    Qt::WindowFlags wf = windowFlags();
+    if (xvdgOptions.bStayOnTop) {
+        wf |= Qt::WindowStaysOnTopHint;
+    } else {
+        wf &= ~(Qt::WindowStaysOnTopHint);
     }
     setWindowFlags(wf);
 
@@ -148,20 +135,17 @@ void GuiMainWindow::dragMoveEvent(QDragMoveEvent *event)
 
 void GuiMainWindow::dropEvent(QDropEvent *event)
 {
-    const QMimeData* mimeData=event->mimeData();
+    const QMimeData *mimeData = event->mimeData();
 
-    if(mimeData->hasUrls())
-    {
-        QList<QUrl> urlList=mimeData->urls();
+    if (mimeData->hasUrls()) {
+        QList<QUrl> urlList = mimeData->urls();
 
-        if(urlList.count())
-        {
-            QString sFileName=urlList.at(0).toLocalFile();
+        if (urlList.count()) {
+            QString sFileName = urlList.at(0).toLocalFile();
 
-            sFileName=XBinary::convertFileName(sFileName);
+            sFileName = XBinary::convertFileName(sFileName);
 
-            if(xvdgOptions.bScanAfterOpen)
-            {
+            if (xvdgOptions.bScanAfterOpen) {
                 _scan(sFileName);
             }
         }
@@ -170,7 +154,7 @@ void GuiMainWindow::dropEvent(QDropEvent *event)
 
 void GuiMainWindow::on_pushButtonOptions_clicked()
 {
-    DialogOptions dialogOptions(this,&xvdgOptions);
+    DialogOptions dialogOptions(this, &xvdgOptions);
     dialogOptions.exec();
 
     adjust();
@@ -189,10 +173,10 @@ void GuiMainWindow::on_pushButtonClear_clicked()
 
 void GuiMainWindow::on_pushButtonSave_clicked()
 {
-    QString sSaveFileNameDirectory=xvdgOptions.sLastDirectory+QDir::separator()+"result"; // mb TODO
+    QString sSaveFileNameDirectory = xvdgOptions.sLastDirectory + QDir::separator() + "result";  // mb TODO
 
-    QAbstractItemModel *pModel=ui->treeViewResult->model();
-    DialogStaticScanProcess::saveResult(this,(ScanItemModel *)pModel,sSaveFileNameDirectory);
+    QAbstractItemModel *pModel = ui->treeViewResult->model();
+    DialogStaticScanProcess::saveResult(this, (ScanItemModel *)pModel, sSaveFileNameDirectory);
 }
 
 void GuiMainWindow::on_pushButtonUnpack_clicked()
@@ -205,4 +189,3 @@ void GuiMainWindow::on_pushButtonAdvanced_clicked()
     // TODO
     // Windows with advanced options
 }
-

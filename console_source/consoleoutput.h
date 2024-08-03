@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2023 hors<horsicq@gmail.com>
+// Copyright (c) 2019-2024 hors<horsicq@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,13 @@
 
 #include <QObject>
 
-class ConsoleOutput : public QObject
-{
+class ConsoleOutput : public QObject {
     Q_OBJECT
 public:
     ConsoleOutput(QObject *parent = 0);
 
 public slots:
-    void messageString(quint32,QString sText);
+    void messageString(quint32, QString sText);
 };
 
-#endif // CONSOLEOUTPUT_H
+#endif  // CONSOLEOUTPUT_H

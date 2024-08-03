@@ -1,4 +1,4 @@
-// Copyright (c) 2020-2023 hors<horsicq@gmail.com>
+// Copyright (c) 2020-2024 hors<horsicq@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_MAC
 #ifndef QT_DEBUG
-   QCoreApplication::setLibraryPaths(QStringList(QString(argv[0]).remove("MacOS/xvdg")+"PlugIns"));
+    QCoreApplication::setLibraryPaths(QStringList(QString(argv[0]).remove("MacOS/xvdg") + "PlugIns"));
 #endif
 #endif
 
